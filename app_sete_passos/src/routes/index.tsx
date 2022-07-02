@@ -120,12 +120,12 @@ const Routes = () => {
         <StackNavigation.Screen
           name="RegisterScreen"
           component={Register}
-          options={{headerShown: false}}
+          options={{headerShown: true , title:'Cadastre-se' , headerStyle:{backgroundColor:'#0D6EFD'} , headerTintColor:'white' , headerShadowVisible:false , headerTitleAlign:'center'}}
         />
         <StackNavigation.Screen
           name="PasswordRecoveryScreen"
           component={PasswordRecovery}
-          options={{headerShown: false}}
+          options={{headerShown: true , title:'Recupere sua senha' , headerStyle:{backgroundColor:'#0D6EFD'} , headerTintColor:'white' , headerShadowVisible:false , headerTitleAlign:'center' }}
         />
       <StackNavigation.Screen
         name="SplashScreen"
