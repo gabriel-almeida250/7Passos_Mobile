@@ -110,7 +110,7 @@ const Routes = () => {
         <StackNavigation.Screen
           name="ProductDetailsScreen"
           component={ProductDetails}
-          options={{headerShown: true, title: 'Produto Categoria'}}
+          options={{headerShown: true, title: 'Detalhe Produto'}}
         />
         <StackNavigation.Screen
           name="CartScreen"
