@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ff0000',
     marginBottom: 10,
-    borderRadius: 20,
+    borderRadius: 0,
   },
   searchIcon: {
     padding: 10,
