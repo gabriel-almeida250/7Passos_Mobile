@@ -20,23 +20,23 @@ const Register = () => {
 
       <Text style={styles.titulos}>Nome:</Text>
       <View style={styles.container_image}></View>
-      <View style={styles.inputs}>
-        <Input placeholder="Digite seu nome..." />
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs} placeholder="Digite seu nome..." />
       </View>
 
       <Text style={styles.titulos}>Email:</Text>
-      <View style={styles.inputs}>
-        <Input placeholder="Digite seu email..." />
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs} placeholder="Digite seu email..." />
       </View>
 
       <Text style={styles.titulos}>Senha:</Text>
-      <View style={styles.inputs}>
-        <Input placeholder="Digite sua senha..." />
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs} placeholder="Digite sua senha..." />
       </View>
 
       <Text style={styles.titulos}>Foto:</Text>
-      <View style={styles.inputs}>
-        <Input placeholder="Insira sua foto de perfil" />
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs} placeholder="Insira sua foto de perfil" />
       </View>
       <TouchableOpacity
         style={{
@@ -83,13 +83,21 @@ const styles = StyleSheet.create({
     width: 249,
     marginBottom: 30,
   },
-
-  inputs: {
+  containerPesquisa: {
+    width: '100%',
     backgroundColor: 'white',
-    margin: 11,
-    width: 350,
-    height: 44,
     borderRadius: 8,
+    height: 55,
+    alignItems:'center',
+    justifyContent:'center',
+    marginBottom:25,
+  },
+  inputs: {
+    color: 'black',
+    borderBottomColor: 'white',
+    padding: 5,
+    marginTop:45,
+    flex: 1,
   },
 
   titulobotao: {
