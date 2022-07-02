@@ -21,9 +21,9 @@ const TabNavigation = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
 
-  const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
+  //const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
 
-  const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);
+  //const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);
 
   return (
     <TabNavigation.Navigator
@@ -66,7 +66,7 @@ const BottomTabNavigator = () => {
       />
       <TabNavigation.Screen name="CategoriesTabScreen" component={Categories} />
       <TabNavigation.Screen name="FavoritesTabScreen" component={Favorites} />
-      <TabNavigation.Screen name="CartTabScreen" component={Cart} />
+      <TabNavigation.Screen name="CartTabScreen" component={Profile} />
     </TabNavigation.Navigator>
   );
 };
@@ -78,29 +78,14 @@ const Routes = () => {
     <NavigationContainer>
       <StackNavigation.Navigator>
         <StackNavigation.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{headerShown: false}}
-        />
-        <StackNavigation.Screen
           name="LoginScreen"
           component={Login}
           options={{headerShown: false}}
         />
         <StackNavigation.Screen
-          name="RegisterScreen"
-          component={Register}
-          options={{headerShown: false}}
-        />
-        <StackNavigation.Screen
-          name="PasswordRecoveryScreen"
-          component={PasswordRecovery}
-          options={{headerShown: false}}
-        />
-        <StackNavigation.Screen
           name="HomeScreen"
-          component={Home}
-          options={{headerShown: true}}
+          component={BottomTabNavigator}
+          options={{headerShown: false}}
         />
         <StackNavigation.Screen
           name="CategoriesScreen"
@@ -132,6 +117,21 @@ const Routes = () => {
           component={Cart}
           options={{headerShown: true, title: 'Produto Categoria'}}
         />
+        <StackNavigation.Screen
+          name="RegisterScreen"
+          component={Register}
+          options={{headerShown: false}}
+        />
+        <StackNavigation.Screen
+          name="PasswordRecoveryScreen"
+          component={PasswordRecovery}
+          options={{headerShown: false}}
+        />
+      <StackNavigation.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{headerShown: false}}
+      />
       </StackNavigation.Navigator>
     </NavigationContainer>
   );
