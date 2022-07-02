@@ -12,9 +12,7 @@ const LoginService = async (email:string, senha:string) => {
             email,
             senha
         });
-        
 
-        
         if (response.status === 200) {
             console.log('Resposta do LoginService: ' + JSON.stringify(response.data));
             tokenDecodificado = jwt_decode(response.data.token)

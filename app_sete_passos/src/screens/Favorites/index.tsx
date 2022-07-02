@@ -1,10 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const Favorites = () => {
   return (
     <View>
-
+      <Text>CuzCuz</Text>
     </View>
   );
 }

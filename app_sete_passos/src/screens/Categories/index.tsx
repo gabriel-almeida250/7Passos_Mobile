@@ -1,10 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const Categories = () => {
   return (
     <View>
-
+      <Text>Feijão</Text>
     </View>
   );
 }
