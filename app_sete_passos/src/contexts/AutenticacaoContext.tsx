@@ -20,6 +20,7 @@ export const AutenticacaoProvider = ({children}) => {
                 name: respostaServiceLogin?.nome,
                 email: respostaServiceLogin?.email,
                 token: respostaServiceLogin?.token,
+                fotoPerfil:respostaServiceLogin?.fotoPerfil,
             });
             return true;
         }
