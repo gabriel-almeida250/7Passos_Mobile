@@ -1,11 +1,18 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Text, View } from 'react-native';
+import Routes from './routes';
+import {AutenticacaoProvider} from './contexts/AutenticacaoContext';
+import {PesquisaProvider} from './contexts/PesquisaContext';
+//import {CarrinhoProvider} from './contexts/CarrinhoContext';
 
-export default function App() {
+export default () => {
   return (
-    <View>
-      <Text>Arroz</Text>
-    </View>
+    <AutenticacaoProvider>
+      <PesquisaProvider>
+        {/* <CarrinhoProvider> */}
+          <Routes />
+       {/* </CarrinhoProvider> */}
+      </PesquisaProvider>
+    </AutenticacaoProvider>
   );
-}
+};
