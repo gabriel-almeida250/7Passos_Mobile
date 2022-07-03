@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
-import  SplashScreen from '../screens/SplashScreen';
+import SplashScreen from '../screens/SplashScreen';
 import {CarrinhoContext} from '../contexts/CarrinhoContext';
 import {withBadge} from 'react-native-elements';
 import Login from '../screens/Login';
@@ -20,7 +20,6 @@ import Cart from '../screens/Cart';
 const TabNavigation = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-
   //const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
 
   //const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);
@@ -50,11 +49,11 @@ const BottomTabNavigator = () => {
         },
         headerShown: false,
         tabBarShowLabel: false,
-      })}
-      tabBarOptions={{
-        activeTintColor: '#000000',
-        inactiveTintColor: '#000000',
-      }}>
+        tabBarActiveBackgroundColor: '#D9D9D9',
+        tabBarInactiveBackgroundColor: '#D9D9D9',
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'black',
+      })}>
       <TabNavigation.Screen
         name="HomeTabScreen"
         component={Home}
@@ -120,18 +119,32 @@ const Routes = () => {
         <StackNavigation.Screen
           name="RegisterScreen"
           component={Register}
-          options={{headerShown: true , title:'Cadastre-se' , headerStyle:{backgroundColor:'#0D6EFD'} , headerTintColor:'white' , headerShadowVisible:false , headerTitleAlign:'center'}}
+          options={{
+            headerShown: true,
+            title: 'Cadastre-se',
+            headerStyle: {backgroundColor: '#0D6EFD'},
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerTitleAlign: 'center',
+          }}
         />
         <StackNavigation.Screen
           name="PasswordRecoveryScreen"
           component={PasswordRecovery}
-          options={{headerShown: true , title:'Recupere sua senha' , headerStyle:{backgroundColor:'#0D6EFD'} , headerTintColor:'white' , headerShadowVisible:false , headerTitleAlign:'center' }}
+          options={{
+            headerShown: true,
+            title: 'Recupere sua senha',
+            headerStyle: {backgroundColor: '#0D6EFD'},
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerTitleAlign: 'center',
+          }}
         />
-      <StackNavigation.Screen
-        name="SplashScreen"
-        component={SplashScreen}
-        options={{headerShown: false}}
-      />
+        <StackNavigation.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
       </StackNavigation.Navigator>
     </NavigationContainer>
   );
