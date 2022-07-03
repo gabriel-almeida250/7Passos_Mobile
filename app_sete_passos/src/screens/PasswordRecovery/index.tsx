@@ -18,8 +18,8 @@ const PasswordRecovery = () => {
         />
       </View>
 
-      <View style={styles.inputs}>
-        <Input
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs}
           placeholder="E-mail"
           leftIcon={
             <Image
@@ -32,9 +32,8 @@ const PasswordRecovery = () => {
         />
       </View>
 
-      <View style={styles.inputs}>
-        <View style={{alignItems: 'center'}}>
-          <Input
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs}
             placeholder="Senha"
             leftIcon={
               <Image
@@ -46,12 +45,11 @@ const PasswordRecovery = () => {
             }
             secureTextEntry
           />
-        </View>
+      
       </View>
 
-      <View style={styles.inputs}>
-        <View style={{alignItems: 'center'}}>
-          <Input
+      <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs}
             placeholder="Repita sua senha"
             leftIcon={
               <Image
@@ -63,7 +61,6 @@ const PasswordRecovery = () => {
             }
             secureTextEntry
           />
-        </View>
       </View>
 
       <TouchableOpacity
@@ -114,13 +111,21 @@ const styles = StyleSheet.create({
     width: 19,
     height: 17.46,
   },
-
-  inputs: {
+  containerPesquisa: {
+    width: '100%',
     backgroundColor: 'white',
-    margin: 11,
-    width: 350,
-    height: 44,
     borderRadius: 8,
+    height: 55,
+    alignItems:'center',
+    justifyContent:'center',
+    marginBottom:25,
+  },
+  inputs: {
+    color: 'black',
+    borderBottomColor: 'white',
+    padding: 5,
+    marginTop:45,
+    flex: 1,
   },
   titulobotao: {
     color: '#0D6EFD',

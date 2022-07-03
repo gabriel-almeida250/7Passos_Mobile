@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Card, Image } from 'react-native-elements';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import AxiosInstance from '../../api/AxiosInstance';
 import BarraPesquisa from '../../components/BarraPesquisa';
 import CardProduto from '../../components/CardProduto';
@@ -51,7 +51,7 @@ const Categories = ({ navigation}) => {
   function ListCategoria({categoria}) {
     return (
       <TouchableOpacity 
-      onPress={() => navigation.navigate('ProductsCategoriesScreen  ')}
+      onPress={() => navigation.navigate('ProductsCategoriesScreen')}
       >
       <Card containerStyle={styles.card_style}>
         <Card.Image
@@ -66,10 +66,11 @@ const Categories = ({ navigation}) => {
   };
 
   return (
-    <ScrollView style={{flex:1}}>
-      <View>
+    <ScrollView style={{backgroundColor: '#0D6EFD'}}>
+      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 20}}>Categorias</Text>
+    
     <BarraPesquisa/>
-    </View>
+    
     <View style={styles.container}>
       
        <FlatList 
@@ -96,7 +97,6 @@ const Categories = ({ navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#0D6EFD',
     justifyContent: 'center',
     alignItems: 'center',
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     marginBottom: 20,
-    width: 306,
+    width: 305,
     height: 284,
     maxHeight: 400,
     borderRadius: 5,
