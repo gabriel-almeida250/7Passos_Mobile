@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, Text} from 'react-native-elements';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const CardProduto = (props:any) => {
@@ -22,18 +22,18 @@ const CardProduto = (props:any) => {
       />
       <Card.Divider />
       <Card.Title style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
-      <Text style={styles.descricao_cards}>{dadosDoProduto.descricaoProduto}</Text>
+      <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto}</Card.Title>
+      
     </Card>
     </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
   card_style: {
-    backgroundColor: 'red',
+    backgroundColor: '#D9D9D9',
     padding: 0,
-    marginBottom: 20,
-    width: 140,
-    height: 260,
+    width: 160,
+    height: 232,
     borderRadius: 5,
     borderWidth: 0,
   },
@@ -41,18 +41,21 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
-
+    width:159.48,
+    height:151.13
   },
-
   titulo_cards: {
     fontSize: 18,
-    color: 'black',
+    color: '#0a0a0a',
+    textAlign: 'center',
   },
-  descricao_cards: {
+  valor_cards: {
     marginBottom: 10,
     fontSize: 16,
     textAlign: 'center',
     color: '#181717',
+    fontStyle:'italic',
+    fontWeight:'normal',
   }
 });
 export default CardProduto;
