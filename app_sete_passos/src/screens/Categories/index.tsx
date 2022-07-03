@@ -51,7 +51,7 @@ const Categories = ({ navigation}) => {
   function ListCategoria({categoria}) {
     return (
       <TouchableOpacity 
-      onPress={() => navigation.navigate('ProductsCategoriesScreen  ')}
+      onPress={() => navigation.navigate('ProductsCategoriesScreen')}
       >
       <Card containerStyle={styles.card_style}>
         <Card.Image
