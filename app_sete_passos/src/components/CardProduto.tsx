@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     height: 232,
     borderRadius: 5,
     borderWidth: 0,
+    marginBottom:25
   },
   imagens_cards: {
     borderTopLeftRadius: 5,

@@ -96,7 +96,11 @@ const Login = ({navigation}) => {
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
-        />
+        />{carregando && (
+          <View style={styles.containerLoader}>
+            <Loader cor="black" />
+          </View>
+        )}
         <Text
           onPress={() => navigation.navigate('PasswordRecoveryScreen')}
           style={styles.texto_senha}>
@@ -110,11 +114,7 @@ const Login = ({navigation}) => {
             Crie sua conta
           </Text>
         </Text>
-        {carregando && (
-          <View style={styles.containerLoader}>
-            <Loader cor="black" />
-          </View>
-        )}
+        
       </TouchableOpacity>
     </View>
   );
