@@ -58,16 +58,11 @@ const Carrousel: any = ({imagens}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderRadius:20
-  },
-  containerImagem:{
-    borderRadius:20
   },
   image: {
     resizeMode: 'cover',
     height: 200,
     width: Dimensions.get('screen').width,
-    borderRadius:20
   },
   indicadorContainer: {
     position: 'absolute',
@@ -77,7 +72,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
     bottom: 10,
     zIndex: 2,
-    borderRadius:20
   },
   indicador: {
     width: 15,
