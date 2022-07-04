@@ -66,23 +66,20 @@ const Categories = ({ navigation}) => {
   };
 
   return (
-    <ScrollView style={{backgroundColor: '#0D6EFD'}}>
-      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 20}}>Categorias</Text>
-    
-    <BarraPesquisa/>
-    
     <View style={styles.container}>
-      
+    
+      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 30}}>Categorias</Text>
+    
        <FlatList 
         data={categoria}
         keyExtractor={(item, index) => String(item.idCategoria)}
         renderItem={({ item }) => <ListCategoria  categoria={item} />}
+        style={styles.cardCategoria}
         // onEndReached={getDadosProduto}
         // onEndReachedThreshold={0.1}
         // ListFooterComponent={ <FooterList load={loading}/>}
         />
     </View>
-    </ScrollView>
   );
 }
 
@@ -104,11 +101,14 @@ const styles = StyleSheet.create({
     margin: 0
     
   },
+  cardCategoria:{
+    margin: 30,
+  },
   card_style: {
     backgroundColor: '#D9D9D9',
     padding: 0,
     margin: 0,
-    marginBottom: 20,
+    marginBottom: 30,
     width: 305,
     height: 284,
     maxHeight: 400,
@@ -123,8 +123,9 @@ const styles = StyleSheet.create({
   },
 
   titulo_cards: {
-    fontSize: 18,
+    fontSize: 20,
     color: 'black',
+    marginTop:10
   },
   descricao_cards: {
     marginBottom: 10,
