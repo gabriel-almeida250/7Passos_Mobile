@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 import Realm from 'realm';
 
-export const CarrinhoContext = createContext({});
+export const FavoritesContext = createContext({});
 
 class ProdutoSchema extends Realm.Object {}
 ProdutoSchema.schema = {
@@ -16,14 +16,14 @@ ProdutoSchema.schema = {
   },
 };
 
-let realm_carrinho = new Realm({schema: [ProdutoSchema], schemaVersion: 1});
+let realm_favorites = new Realm({schema: [ProdutoSchema], schemaVersion: 1});
 
-export const CarrinhoProvider= ({children}) => {
+export const FavoritesProvider= ({children}) => {
   const listarProdutos = () => {
-    return realm_carrinho.objects('Produto');
+    return realm_favorites.objects('Produto');
   };
   const contaQuantidadeProdutos = () => {
-    return realm_carrinho.objects('Produto').length;
+    return realm_favorites.objects('Produto').length;
   };
   const adicionarProduto = (
     _sku: string,
@@ -32,15 +32,15 @@ export const CarrinhoProvider= ({children}) => {
     _preco: number,
     _imagem: string,
   ) => {
-    const ultimoProdutoCadastrado = realm_carrinho
+    const ultimoProdutoCadastrado = realm_favorites
       .objects('Produto')
       .sorted('id_produto', true)[0];
     const ultimoIdCadastrado =
       ultimoProdutoCadastrado == null ? 0 : ultimoProdutoCadastrado.id_produto;
     const proximoId = ultimoIdCadastrado == null ? 1 : ultimoIdCadastrado + 1;
 
-    realm_carrinho.write(() => {
-      const produto = realm_carrinho.create('Produto', {
+    realm_favorites.write(() => {
+      const produto = realm_favorites.create('Produto', {
         id_produto: proximoId,
         sku: _sku,
         nome_produto: _nome,
@@ -50,19 +50,19 @@ export const CarrinhoProvider= ({children}) => {
       });
     });
 
-    console.log(JSON.stringify(realm_carrinho.objects('Produto')));
+    console.log(JSON.stringify(realm_favorites.objects('Produto')));
   };
 
   const removerItemProduto = (_id) => {
-    realm_carrinho.write(() =>
-      realm_carrinho.delete(
-        realm_carrinho.objects('Produto').filter(produto => produto.id_produto == _id),
+    realm_favorites.write(() =>
+      realm_favorites.delete(
+        realm_favorites.objects('Produto').filter(produto => produto.id_produto == _id),
       ),
     )
   }
 
   return (
-    <CarrinhoContext.Provider
+    <FavoritesContext.Provider
       value={{
         listarProdutos,
         contaQuantidadeProdutos,
@@ -70,6 +70,6 @@ export const CarrinhoProvider= ({children}) => {
         removerItemProduto,
       }}>
       {children}
-    </CarrinhoContext.Provider>
+    </FavoritesContext.Provider>
   );
 };
