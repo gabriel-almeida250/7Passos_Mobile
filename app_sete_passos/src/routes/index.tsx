@@ -3,7 +3,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
-import SplashScreen from '../screens/SplashScreen';
 import {CarrinhoContext} from '../contexts/CarrinhoContext';
 import {withBadge} from 'react-native-elements';
 import Login from '../screens/Login';
@@ -16,13 +15,14 @@ import Profile from '../screens/Profile';
 import ProductsCategories from '../screens/ProductsCategories';
 import ProductDetails from '../screens/ProductDetails';
 import Cart from '../screens/Cart';
+import { SplashScreen } from '../screens/SplashScreen';
 
 const TabNavigation = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-  //const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
+  const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
 
-  //const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);
+  const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);
 
   return (
     <TabNavigation.Navigator
@@ -38,9 +38,12 @@ const BottomTabNavigator = () => {
               iconName = 'list';
               break;
             case 'FavoritesTabScreen':
-              iconName = 'favorites';
+              iconName = 'heart';
               break;
-            case 'CartTabScreen':
+            case 'ProfileTabScreen':
+              iconName = 'user';
+              break;
+              case 'CartTabScreen':
               iconName = 'shopping-cart';
               break;
           }
@@ -65,7 +68,12 @@ const BottomTabNavigator = () => {
       />
       <TabNavigation.Screen name="CategoriesTabScreen" component={Categories} />
       <TabNavigation.Screen name="FavoritesTabScreen" component={Favorites} />
-      <TabNavigation.Screen name="CartTabScreen" component={Profile} />
+      <TabNavigation.Screen name="CartTabScreen" component={Cart}  options={{
+        tabBarIcon: () => (
+          <BadgeIcone name='shopping-cart' type='font-awesome' size={24} color='black' />
+          )
+      }}/>
+      <TabNavigation.Screen name="ProfileTabScreen" component={Profile} />
     </TabNavigation.Navigator>
   );
 };
@@ -76,6 +84,11 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <StackNavigation.Navigator>
+<StackNavigation.Screen
+  name="SplashScreen"
+  component={SplashScreen}
+  options={{headerShown: false}}
+/>
         <StackNavigation.Screen
           name="LoginScreen"
           component={Login}
@@ -147,11 +160,6 @@ const Routes = () => {
             headerShadowVisible: false,
             headerTitleAlign: 'center',
           }}
-        />
-        <StackNavigation.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          options={{headerShown: false}}
         />
       </StackNavigation.Navigator>
     </NavigationContainer>
