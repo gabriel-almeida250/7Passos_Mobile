@@ -4,22 +4,23 @@ import AxiosInstance from '../../api/AxiosInstance';
 import { ProdutoType } from '../../models/ProdutoType';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import CardProduto from '../../components/CardProduto';
+import { CarrinhoContext } from '../../contexts/CarrinhoContext';
 
 const ProductDetails = ({ route, navigation }) => {
   const { dadosDoProduto } = route.params;
   console.log('Entrou', dadosDoProduto);
 
-  //const {adicionarProduto} = useContext(CarrinhoContext);
+  const {adicionarProduto} = useContext(CarrinhoContext);
 
-  // const handleAddProduto = () => {
-  //   adicionarProduto(
-  //     dadosDoProduto.sku,
-  //     dadosDoProduto.nomeProduto,
-  //     dadosDoProduto.descricaoProduto,
-  //     dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
-  //     dadosDoProduto.imagemProduto,
-  //   );
-  // };
+  const handleAddProduto = () => {
+    adicionarProduto(
+      dadosDoProduto.sku,
+      dadosDoProduto.nomeProduto,
+      dadosDoProduto.descricaoProduto,
+      dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
+      dadosDoProduto.imagemProduto,
+    );
+  };
 
   return (
     <View style={styles.containerPai}>
@@ -71,6 +72,7 @@ const ProductDetails = ({ route, navigation }) => {
         /> */}
       <View style={styles.container_comprar}>
         <TouchableOpacity
+        onPress={() => handleAddProduto()}
           style={styles.btt_comprar}>
           <Text style={styles.txt_btt_comprar}>Comprar</Text>
         </TouchableOpacity>
