@@ -30,28 +30,33 @@ const CardProduto = (props:any) => {
 };
 const styles = StyleSheet.create({
   card_style: {
+    flex:1,
     backgroundColor: '#D9D9D9',
     padding: 0,
-    width: 160,
-    height: 232,
+    width: '85%',
+    height: '78%',
     borderRadius: 5,
     borderWidth: 0,
-    marginBottom:25
+    marginBottom:18,
+    
+   // elevation:10,
+    //shadowColor:'#000306',
   },
   imagens_cards: {
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
-    width:159.48,
+    width:164,
     height:151.13
   },
   titulo_cards: {
     fontSize: 18,
     color: '#0a0a0a',
     textAlign: 'center',
+    marginBottom:3,
   },
   valor_cards: {
-    marginBottom: 10,
+    marginBottom: 20,
     fontSize: 16,
     textAlign: 'center',
     color: '#181717',
