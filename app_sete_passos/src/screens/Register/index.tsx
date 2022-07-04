@@ -3,7 +3,7 @@ import {View,StyleSheet,TouchableOpacity,Alert,Keyboard,Image,} from 'react-nati
 import {Text, Input, Icon, Button} from 'react-native-elements';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 import Loader from '../../components/Loader';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 
 const Register = () => {
   const [carregando, setCarregando] = useState(false);
@@ -64,7 +64,6 @@ const Register = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#0D6EFD',
     padding: 16,
     alignItems: 'stretch',
@@ -76,7 +75,9 @@ const styles = StyleSheet.create({
   },
   titulos: {
     color: 'white',
-    marginLeft: 15,
+    fontWeight:'bold',
+    fontSize:18,
+    marginBottom:3
   },
   imagem: {
     height: 65,
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     color: 'black',
     borderBottomColor: 'white',
     padding: 5,
-    marginTop:45,
+    marginTop:35,
     flex: 1,
   },
 

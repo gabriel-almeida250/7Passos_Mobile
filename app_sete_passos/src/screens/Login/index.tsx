@@ -74,6 +74,7 @@ const Login = ({navigation}) => {
           placeholder="Senha"
           onChangeText={setSenha}
           value={senha}
+          secureTextEntry={true}
           leftIcon={
             <Icon name="lock" color="grey" type="ionocons" size={26} />
           }
@@ -151,11 +152,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: 'white',
-    padding: 5,
-    marginTop:45,
-    flex: 1,
-  },
+    marginTop:33,
+    },
   titulobotao: {
     color: '#0D6EFD',
     margin: 5,

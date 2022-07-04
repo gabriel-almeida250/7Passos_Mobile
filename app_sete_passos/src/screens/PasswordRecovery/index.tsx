@@ -107,10 +107,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: 'white',
-    padding: 5,
-    marginTop:45,
-    flex: 1,
+    marginTop:33,
+  
   },
   titulobotao: {
     color: '#0D6EFD',

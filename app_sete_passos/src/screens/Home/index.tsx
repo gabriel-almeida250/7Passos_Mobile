@@ -46,8 +46,8 @@ const Home = ({navigation}) => {
   }, 2000);
 
   const imagens = [
-    'https://st2.depositphotos.com/6544740/9337/i/600/depositphotos_93376372-stock-photo-sunset-over-sea-pier.jpg',
-    'https://t.ctcdn.com.br/5XPASDBUosgmBv5Ptpxcd6eTJso=/512x288/smart/filters:format(webp)/i257652.jpeg',
+    'https://images-ext-2.discordapp.net/external/soXks4RbTqJlWu41UuuQBEwqOWMTyJZUCfZwrZETbTU/%3Fv%3D637850404090930000/https/artwalk.vteximg.com.br/arquivos/ids/245218/tenis-air-jordan-4-retro-military-black-masculino-1.jpg?width=406&height=406',
+    'https://images-ext-1.discordapp.net/external/Hmz6TTmYNpLIYsMwpWaeSRhG9yr_pkBzArZGhIDpchQ/%3Fts%3D1632126026%26ims%3D544x/https/static.zattini.com.br/produtos/bota-coturno-feminina-vicerinne-tratorada-salto-alto/06/GYK-0049-006/GYK-0049-006_zoom3.jpg?width=406&height=406',
   ];
 
   return (
@@ -68,10 +68,12 @@ const Home = ({navigation}) => {
       )}
       {!carregando && (
         <View>
+          <View style={styles.estilizandoCarro}>
           <Carrousel imagens={imagens} />
-
+          </View>
           <Text style={styles.titulo_secao}>{'Mais vendidos'}</Text>
 
+          <View style={styles.estilizandoCard}>
           <FlatList
             data={produtos}
             keyExtractor={(item, index) => String(item.idProduto)}
@@ -81,6 +83,7 @@ const Home = ({navigation}) => {
             // onEndReachedThreshold={0.1}
             // ListFooterComponent={ <FooterList load={loading}/>}
           />
+          </View>
         </View>
       )}
     </ScrollView>
@@ -91,11 +94,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0D6EFD',
-    padding: 16,
+    padding: 0,
   },
   logoalinhar:{
 alignItems:'center'
   },
+    estilizandoCarro:{
+      flex:1,
+      alignItems:'center',
+      flexDirection:'row',
+    },
   logo:{
     height: 51,
     width: 153,
@@ -113,6 +121,10 @@ alignItems:'center'
     fontSize: 25,
     color: 'white',
     textAlign: 'center',
+  },
+  estilizandoCard:{
+    justifyContent:'center',
+    alignItems:'center'
   },
   containerLoader: {
     position: 'relative',

@@ -57,9 +57,7 @@ const ProductsCategories = ({ navigation}) => {
     <StatusBar
         barStyle="light-content"
         backgroundColor={styles.container.backgroundColor}
-        />
-        <ScrollView style={{backgroundColor: '#0D6EFD'}}>
-          <BarraPesquisa />
+        />        
     <View style={styles.container}>
      
       {!semProduto &&(
@@ -81,7 +79,6 @@ const ProductsCategories = ({ navigation}) => {
           </View>
         )}
     </View>
-    </ScrollView>
     </>
   );
 }
