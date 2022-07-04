@@ -5,7 +5,7 @@ import useInterval from '../utils/useInteraval';
 const Carrousel: any = ({imagens}) => {
   const [currentImage, setCurrentImage] = useState(0);
   const animation = useRef(new Animated.Value(0));
-  useInterval(() => handleAnimation(), 5000);
+  useInterval(() => handleAnimation(), 4000);
 
   const handleAnimation = () => {
     let newCurrentImagem = currentImage + 1;

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {StyleSheet, ScrollView, View, FlatList} from 'react-native';
-import {Text} from 'react-native-elements';
+import {Image, Text} from 'react-native-elements';
 import {useEffect, useState} from 'react';
 import AxiosInstance from '../../api/AxiosInstance';
 import CardProduto from '../../components/CardProduto';
@@ -52,6 +52,13 @@ const Home = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
+       <View  style={styles.logoalinhar}>
+            <Image style={styles.logo}
+              source={{
+                uri: 'https://media.discordapp.net/attachments/972547744516415540/992889603579199549/Frame.png',
+              }}
+            />
+          </View>
       <BarraPesquisa navigation={navigation} />
       {carregando && (
         <View style={styles.containerLoader}>
@@ -85,6 +92,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0D6EFD',
     padding: 16,
+  },
+  logoalinhar:{
+alignItems:'center'
+  },
+  logo:{
+    height: 51,
+    width: 153,
+    marginTop:15,
+    marginBottom: 15,
   },
   titulo_secao: {
     marginVertical: 20,
