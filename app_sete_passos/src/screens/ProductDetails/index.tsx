@@ -4,26 +4,27 @@ import AxiosInstance from '../../api/AxiosInstance';
 import { ProdutoType } from '../../models/ProdutoType';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import CardProduto from '../../components/CardProduto';
+import { CarrinhoContext } from '../../contexts/CarrinhoContext';
 
 const ProductDetails = ({ route, navigation }) => {
   const { dadosDoProduto } = route.params;
   console.log('Entrou', dadosDoProduto);
 
-  //const {adicionarProduto} = useContext(CarrinhoContext);
+  const {adicionarProduto} = useContext(CarrinhoContext);
 
-  // const handleAddProduto = () => {
-  //   adicionarProduto(
-  //     dadosDoProduto.sku,
-  //     dadosDoProduto.nomeProduto,
-  //     dadosDoProduto.descricaoProduto,
-  //     dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
-  //     dadosDoProduto.imagemProduto,
-  //   );
-  // };
+  const handleAddProduto = () => {
+    adicionarProduto(
+      dadosDoProduto.sku,
+      dadosDoProduto.nomeProduto,
+      dadosDoProduto.descricaoProduto,
+      dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
+      dadosDoProduto.imagemProduto,
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerPai}>
+    <View style={styles.containerPai}>
+      <View style={styles.container}>
         <Image
           style={styles.containerImagem}
           source={{ uri: dadosDoProduto.imagemProduto }}
@@ -33,7 +34,7 @@ const ProductDetails = ({ route, navigation }) => {
         <Text style={styles.nome_produto}>{dadosDoProduto.nomeProduto}</Text>
         <Text style={styles.descricao_produto}>{dadosDoProduto.descricaoProduto}</Text>
         <Text style={styles.preco_produto}>R${dadosDoProduto.precoProduto}</Text>
-        <View style={styles.containerProduto}>
+        <View style={styles.containerTamanho}>
             <TouchableOpacity
             style={styles.btt_tamanhos}>
             <Text style={styles.txt_btt_tamanhos}>36</Text>
@@ -71,6 +72,7 @@ const ProductDetails = ({ route, navigation }) => {
         /> */}
       <View style={styles.container_comprar}>
         <TouchableOpacity
+        onPress={() => handleAddProduto()}
           style={styles.btt_comprar}>
           <Text style={styles.txt_btt_comprar}>Comprar</Text>
         </TouchableOpacity>
@@ -80,43 +82,38 @@ const ProductDetails = ({ route, navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerPai: {
     flex: 1,
-    backgroundColor: '#1C78FF',
+    backgroundColor: '#0D6EFD',
     padding: 16,
     alignItems: 'stretch',
     justifyContent: 'space-between',
     display: 'flex'
   },
-  containerPai: {
+  container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-
+    alignItems: 'center',
+    backgroundColor: 'white',
+    marginLeft: -15,
+    width: 360,
+    height: 380
   },
   containerImagem: {
-    marginTop: -16,
-    //marginLeft: -15,
-    width: '110%',
-    height: '110%',
-    //width: 358,
-    //height: 250,
-  },
-  containerProduto: {
+    //marginTop: 25,
+    resizeMode: 'contain',
     width: '100%',
-    height: '60%',
-    justifyContent: 'center',
-    paddingTop: 30
-    //marginTop:  
-    //backgroundColor: 'red'
-
+    height: '100%',
+    // width: 360,
+    // height: 238,
   },
   nome_produto: {
     fontSize: 24,
     color: 'white',
     marginBottom: 20,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
+    marginTop: -30
   },
   descricao_produto: {
     fontSize: 20,
@@ -129,17 +126,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
-    marginBottom: 50,
+    marginBottom: 24,
     marginLeft: 20
   },
+  containerProduto: {
+    width: '100%',
+    height: '45%',
+    justifyContent: 'center',
+    paddingTop: 10,
+    margin: 'auto',
+  },
+  containerTamanho: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',  
+    flexDirection: 'row',
+    //backgroundColor: 'red',
+    marginLeft: 12
+  },
   btt_tamanhos: {
-    //backgroundColor: 'green',
     height: '25%',
     padding: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     flexDirection: 'row',
-    marginRight: 12
+    marginRight: 12,
+    alignSelf: 'center',
   },
   txt_btt_tamanhos: {
     backgroundColor: 'white',
@@ -149,7 +160,6 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     fontSize: 20,
-    marginLeft: 'auto',
     padding: 2,
   },
   container_comprar: {
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   txt_btt_comprar: {
-    color: '#1C78FF',
+    color: '#0D6EFD',
     fontSize: 18,
     textAlign: 'center'
   },
