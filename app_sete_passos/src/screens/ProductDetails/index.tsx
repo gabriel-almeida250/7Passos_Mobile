@@ -5,12 +5,16 @@ import { ProdutoType } from '../../models/ProdutoType';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import CardProduto from '../../components/CardProduto';
 import { CarrinhoContext } from '../../contexts/CarrinhoContext';
+import { Icon, Input } from 'react-native-elements';
+import { FavoritesContext } from '../../contexts/FavoritesContext';
 
 const ProductDetails = ({ route, navigation }) => {
   const { dadosDoProduto } = route.params;
   console.log('Entrou', dadosDoProduto);
 
-  const {adicionarProduto} = useContext(CarrinhoContext);
+  const { adicionarProduto } = useContext(CarrinhoContext);
+  const { adicionarProdutoFavoritos } = useContext(FavoritesContext);
+  const [favorito, setFavorito ] = useState(false);
 
   const handleAddProduto = () => {
     adicionarProduto(
@@ -21,10 +25,30 @@ const ProductDetails = ({ route, navigation }) => {
       dadosDoProduto.imagemProduto,
     );
   };
+  const handleAddProduto2 = () => {
+    adicionarProdutoFavoritos(
+      dadosDoProduto.sku,
+      dadosDoProduto.nomeProduto,
+      dadosDoProduto.descricaoProduto,
+      dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
+      dadosDoProduto.imagemProduto,
+    );
+    setFavorito(!favorito)
+    console.log("Entrou favorito" + dadosDoProduto);
 
+  };
   return (
     <View style={styles.containerPai}>
       <View style={styles.container}>
+      <TouchableOpacity
+          style={styles.btt_favoritar}
+          onPress={() => handleAddProduto2()}>
+          {favorito &&
+            <Icon name="heart" color="red" type="font-awesome" size={25} />}
+          {!favorito &&
+            <Icon name="heart-o" color="red" type="font-awesome" size={25} />
+          }
+        </TouchableOpacity>
         <Image
           style={styles.containerImagem}
           source={{ uri: dadosDoProduto.imagemProduto }}
@@ -35,7 +59,7 @@ const ProductDetails = ({ route, navigation }) => {
         <Text style={styles.descricao_produto}>{dadosDoProduto.descricaoProduto}</Text>
         <Text style={styles.preco_produto}>R${dadosDoProduto.precoProduto}</Text>
         <View style={styles.containerTamanho}>
-            <TouchableOpacity
+          <TouchableOpacity
             style={styles.btt_tamanhos}>
             <Text style={styles.txt_btt_tamanhos}>36</Text>
           </TouchableOpacity>
@@ -72,7 +96,7 @@ const ProductDetails = ({ route, navigation }) => {
         /> */}
       <View style={styles.container_comprar}>
         <TouchableOpacity
-        onPress={() => handleAddProduto()}
+          onPress={() => handleAddProduto()}
           style={styles.btt_comprar}>
           <Text style={styles.txt_btt_comprar}>Comprar</Text>
         </TouchableOpacity>
@@ -104,8 +128,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: '100%',
     height: '100%',
+    position: 'absolute'
     // width: 360,
     // height: 238,
+  },
+  btt_favoritar: {
+    alignItems: 'stretch',
+    marginTop: -120,
+    marginLeft: 270,
+    borderBottomWidth: 0,
+    zIndex: 1
   },
   nome_produto: {
     fontSize: 24,
@@ -139,7 +171,7 @@ const styles = StyleSheet.create({
   containerTamanho: {
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 'auto',  
+    margin: 'auto',
     flexDirection: 'row',
     //backgroundColor: 'red',
     marginLeft: 12

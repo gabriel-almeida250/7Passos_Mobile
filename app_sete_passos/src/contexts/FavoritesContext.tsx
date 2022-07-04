@@ -19,13 +19,13 @@ ProdutoSchema.schema = {
 let realm_favorites = new Realm({schema: [ProdutoSchema], schemaVersion: 1});
 
 export const FavoritesProvider= ({children}) => {
-  const listarProdutos = () => {
+  const listarProdutosFavoritos = () => {
     return realm_favorites.objects('Produto');
   };
   const contaQuantidadeProdutos = () => {
     return realm_favorites.objects('Produto').length;
   };
-  const adicionarProduto = (
+  const adicionarProdutoFavoritos = (
     _sku: string,
     _nome: string,
     _descricao: string,
@@ -64,9 +64,9 @@ export const FavoritesProvider= ({children}) => {
   return (
     <FavoritesContext.Provider
       value={{
-        listarProdutos,
+        listarProdutosFavoritos,
         contaQuantidadeProdutos,
-        adicionarProduto,
+        adicionarProdutoFavoritos,
         removerItemProduto,
       }}>
       {children}
