@@ -6,7 +6,7 @@ import { FavoritesContext } from "../../contexts/FavoritesContext";
 
 const Favorites = () => {
 
-  const { listarProdutos, removerItemProduto } = useContext(FavoritesContext);
+  const { listarProdutosFavoritos, removerItemProduto } = useContext(FavoritesContext);
   const [favorites, setFavorites] = useState();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Favorites = () => {
   }, []);
 
   const getDadosFavorites = () => {
-      setFavorites(listarProdutos());
+      setFavorites(listarProdutosFavoritos());
   }
 
   const deleteItem = (idProduto:number) => {
