@@ -109,7 +109,15 @@ const Routes = () => {
         <StackNavigation.Screen
           name="ProductDetailsScreen"
           component={ProductDetails}
-          options={{headerShown: true, title: 'Detalhe Produto'}}
+          options={{
+            headerShown: true,
+            title: 'Produto',
+            headerStyle: {backgroundColor: '#0D6EFD'},
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerTitleAlign: 'center',
+          }}
+         
         />
         <StackNavigation.Screen
           name="CartScreen"
