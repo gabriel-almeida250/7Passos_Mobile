@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import {  Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Icon, Text } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
+import Loader from "../../components/Loader";
 import { CarrinhoContext } from "../../contexts/CarrinhoContext";
 
 const Cart = () => {
   const { listarProdutos, removerItemProduto } = useContext(CarrinhoContext);
   const [carrinho, setCarrinho] = useState();
-  
   const [quantidade, setQuantidade] = useState(1)
+  const [carregando, setCarregando] = useState(true);
   
   useEffect(() => {
       getDadosCarrinho();
@@ -32,7 +33,21 @@ const Cart = () => {
     }
 }
 
+setTimeout(() => {
+  if (carrinho) {
+    setCarregando(false);
+  }
+}, 2000);
+
   return(
+    <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+    {!carregando && (
       <FlatList 
       data={carrinho}
       keyExtractor={(item, index) => index.toString()}
@@ -71,6 +86,8 @@ const Cart = () => {
           )
       }}
       />
+      )}
+      </>
   )
 }
 
@@ -85,6 +102,19 @@ const styles = StyleSheet.create({
   text:{
     textAlign: "center",
     color: '#0D6EFD'
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
   }
 });
 

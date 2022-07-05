@@ -7,6 +7,7 @@ import CardProduto from '../../components/CardProduto';
 import { CarrinhoContext } from '../../contexts/CarrinhoContext';
 import { Icon, Input } from 'react-native-elements';
 import { FavoritesContext } from '../../contexts/FavoritesContext';
+import Loader from '../../components/Loader';
 
 const ProductDetails = ({ route, navigation }) => {
   const { dadosDoProduto } = route.params;
@@ -15,6 +16,8 @@ const ProductDetails = ({ route, navigation }) => {
   const { adicionarProduto } = useContext(CarrinhoContext);
   const { adicionarProdutoFavoritos } = useContext(FavoritesContext);
   const [favorito, setFavorito ] = useState(false);
+  const [carregando, setCarregando] = useState(true);
+
 
   const handleAddProduto = () => {
     adicionarProduto(
@@ -37,7 +40,23 @@ const ProductDetails = ({ route, navigation }) => {
     console.log("Entrou favorito" + dadosDoProduto);
 
   };
+
+  setTimeout(() => {
+    if (dadosDoProduto) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return (
+    <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+   {!carregando && (
+
     <View style={styles.containerPai}>
       <View style={styles.container}>
       <TouchableOpacity
@@ -85,15 +104,7 @@ const ProductDetails = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <FlatList
-          data={produto}
-          keyExtractor={(item, index) => String(item.idProduto)}
-          renderItem={({ item }) => <ListProduto produto={item} />}
-          horizontal={true}
-        //onEndReached={getDadosProduto}
-        //onEndReachedThreshold={0.1}
-        //ListFooterComponent={ <FooterList load={loading}/>}
-        /> */}
+
       <View style={styles.container_comprar}>
         <TouchableOpacity
           onPress={() => handleAddProduto()}
@@ -102,6 +113,8 @@ const ProductDetails = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
+        )}
+        </>
   )
 }
 
@@ -113,6 +126,19 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'space-between',
     display: 'flex'
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
   },
   container: {
     flex: 1,
