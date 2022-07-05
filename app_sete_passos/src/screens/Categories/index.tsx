@@ -13,13 +13,13 @@ import { CategoriaType } from '../../models/CategoriaType';
 
 const Categories = ({ navigation}) => {
 
-  const perPage = 5;
+  const perPage = 4;
   const [categoria, setCategoria] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
   const [carregando, setCarregando] = useState(true);
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
 
   const selecionaPesquisa = async (categoria: any) => {
     pesquisar.Buscar(categoria);
@@ -34,7 +34,7 @@ const Categories = ({ navigation}) => {
 
   useEffect(() => {
     loadApi();
-  }, []);
+  }, [page]);
 
   async function loadApi() {
     if (loading) return;
