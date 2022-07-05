@@ -22,8 +22,11 @@ const Profile = ({navigation}) => {
           <Button
             buttonStyle={styles.botao}
             titleStyle={styles.tituloBotao}
-            title="Editar Senha"
-            onPress={()=> navigation.navigate("PasswordRecoveryScreen")}
+            title="Trocar Senha"
+            onPress={()=> navigation.navigate({
+              name:"ChangePasswordScreen",
+              params: { dadosDoUsuario: usuario,
+            }})}
           />
           <Text onPress={()=> logout()} style={styles.btnSair}>Sair</Text>
         </View>
