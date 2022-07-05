@@ -1,12 +1,85 @@
 import React, {useState, useContext} from 'react';
-import {View,StyleSheet,TouchableOpacity,Alert,Keyboard,Image,} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Keyboard,
+  Image,
+} from 'react-native';
 import {Text, Input, Icon, Button} from 'react-native-elements';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 import Loader from '../../components/Loader';
 import {ScrollView} from 'react-native';
 
-const Register = () => {
+const Register = ({navigation}) => {
   const [carregando, setCarregando] = useState(false);
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [foto, setFoto] = useState('');
+  const [senha, setSenha] = useState('');
+  const {register} = useContext(AutenticacaoContext);
+
+  const [erroNome, setErroNome] = useState('');
+  const [erroEmail, setErroEmail] = useState('');
+  const [erroFoto, setErroFoto] = useState('');
+  const [erroSenha, setErroSenha] = useState('');
+  const regexEmail =
+    /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$/;
+
+  const validarFormulario = () => {
+    let error = false;
+    setErroNome('');
+    setErroEmail('');
+    setErroSenha('');
+    setErroFoto('');
+
+    if (nome == '') {
+      setErroNome('O campo nome é obrigatório.');
+      error = true;
+    }
+
+    if (email == '') {
+      setErroEmail('O campo email é obrigatório.');
+      error = true;
+    }
+
+    if (senha == '') {
+      setErroSenha('O campo senha é obrigatório.');
+      error = true;
+    }
+
+    if (foto == '') {
+      setErroFoto('O campo foto é obrigatório.');
+      error = true;
+    }
+
+    if (!regexEmail.test(String(email).toLowerCase())) {
+      setErroEmail('Preencha o email corretamente.');
+      error = true;
+    }
+    return !error;
+  };
+
+  const cadastrarUsuario = async (nomeUsuario:string, emailUsuario: string, senhaUsuario: string,fileUsuario:string) => {
+    setCarregando(true);
+    Keyboard.dismiss();
+
+    if (validarFormulario()) {
+      const respostaRegister = await register(nomeUsuario,emailUsuario, senhaUsuario,fileUsuario);
+      if (!respostaRegister) {
+        setCarregando(false);
+        Alert.alert('Erro', '', [
+          {text: 'Ok'},
+          {text: 'Não foi possivel realizar o seu cadastro.'},
+        ]);
+      } else {
+        setCarregando(false);
+        navigation.navigate('HomeScreen');
+      }
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.container_image}>
@@ -21,24 +94,56 @@ const Register = () => {
       <Text style={styles.titulos}>Nome:</Text>
       <View style={styles.container_image}></View>
       <View style={styles.containerPesquisa}>
-        <Input inputContainerStyle={styles.inputs} placeholder="Digite seu nome..." />
+        <Input
+          inputContainerStyle={styles.inputs}
+          placeholder="Digite seu nome..."
+          errorMessage={erroNome}
+          onChangeText={valor => {
+            setNome(valor);
+            setErroNome('');
+          }}
+        />
       </View>
 
       <Text style={styles.titulos}>Email:</Text>
       <View style={styles.containerPesquisa}>
-        <Input inputContainerStyle={styles.inputs} placeholder="Digite seu email..." />
+        <Input
+          inputContainerStyle={styles.inputs}
+          placeholder="Digite seu email..."
+          errorMessage={erroEmail}
+          onChangeText={valor => {
+            setEmail(valor);
+            setErroEmail('');
+          }}
+        />
       </View>
 
       <Text style={styles.titulos}>Senha:</Text>
       <View style={styles.containerPesquisa}>
-        <Input inputContainerStyle={styles.inputs} placeholder="Digite sua senha..." />
+        <Input
+          inputContainerStyle={styles.inputs}
+          placeholder="Digite sua senha..."
+          errorMessage={erroSenha}
+          onChangeText={valor => {
+            setSenha(valor);
+            setErroSenha('');
+          }}
+        />
       </View>
 
       <Text style={styles.titulos}>Foto:</Text>
       <View style={styles.containerPesquisa}>
-        <Input inputContainerStyle={styles.inputs} placeholder="Insira sua foto de perfil" />
+        <Input
+          inputContainerStyle={styles.inputs}
+          placeholder="Insira a url da sua foto de perfil"
+          errorMessage={erroFoto}
+          onChangeText={valor => {
+            setFoto(valor);
+            setErroFoto('');
+          }}
+        />
       </View>
-      <TouchableOpacity
+      <View
         style={{
           position: 'relative',
           borderRadius: 50,
@@ -50,6 +155,7 @@ const Register = () => {
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
+          onPress={() => cadastrarUsuario()}
         />
 
         {carregando && (
@@ -57,7 +163,7 @@ const Register = () => {
             <Loader cor="black" />
           </View>
         )}
-      </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -75,9 +181,9 @@ const styles = StyleSheet.create({
   },
   titulos: {
     color: 'white',
-    fontWeight:'bold',
-    fontSize:18,
-    marginBottom:3
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 3,
   },
   imagem: {
     height: 65,
@@ -89,15 +195,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     height: 55,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 25,
   },
   inputs: {
     color: 'black',
     borderBottomColor: 'white',
     padding: 5,
-    marginTop:35,
+    marginTop: 35,
     flex: 1,
   },
 
