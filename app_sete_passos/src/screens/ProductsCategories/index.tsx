@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native';
 import { Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
 import BarraPesquisa from '../../components/BarraPesquisa';
@@ -11,33 +11,31 @@ import { ProdutoType } from '../../models/ProdutoType';
 
 const ProductsCategories = ({ navigation}) => {
 
+  const perPage = 2;
   const [produto, setProdutos] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const [semProduto, setSemProduto] = useState(false)
   const [carregando, setCarregando] = useState(true);
   const {usuario} = useContext(AutenticacaoContext);
-  const pesquisar = usePesquisar();
-
+  const [page, setPage] = useState(1)
+ 
   useEffect(() => {
-    getProdutos();
+    loadApi();
   }, []);
 
-  const getProdutos = async () => {
-    // setLoading(true);
-    AxiosInstance.get(`/produto`, {
-      headers: {'Authorization': `Bearer ${usuario.token}`},
+  async function loadApi() {
+    if (loading) return;
+
+    setLoading(true);
+
+    const response = await   AxiosInstance.get(`/produto?pagina=${page}&qtdRegistros=${perPage}`, {
+      headers: {Authorization: `Bearer ${usuario.token}`},
     })
-      .then(result => {
-        console.log('Dados dos produtos:' + JSON.stringify(result.data));
-        setProdutos(result.data);
-        // setLoading(false);
-      })
-      .catch(error => {
-        console.log(
-          'Erro ao carregar a lista de produtos - ' + JSON.stringify(error),
-        );
-      });
-  };
+    setProdutos([...produto, ...response.data]);
+    setPage(page +1);
+    setLoading(false)
+
+  }
 
   function ListProduto({produto}) {
     return (
@@ -84,9 +82,9 @@ const ProductsCategories = ({ navigation}) => {
         keyExtractor={(item, index) => String(item.idProduto)}
         renderItem={({ item }) => <ListProduto  produto={item} />}
         numColumns={2}
-        // onEndReached={getDadosProduto}
-        // onEndReachedThreshold={0.1}
-        // ListFooterComponent={ <FooterList load={loading}/>}
+        onEndReached={loadApi}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={ <FooterList load={loading}/>}
         />
         )}
         {semProduto &&(
@@ -102,14 +100,14 @@ const ProductsCategories = ({ navigation}) => {
   );
 }
 
-// function FooterList({load}) {
-//   if (!load) return null;
-//   return(
-//     <View style={styles.loading}>
-//       <ActivityIndicator size={25} color='red' />
-//     </View>
-//   )
-// }
+function FooterList({load}) {
+  if (!load) return null;
+  return(
+    <View style={styles.loading}>
+      <ActivityIndicator size={25} color='red' />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   nomeLoader: {
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
-    margin: 0
+    margin: 0,
   },
   card_style: {
     backgroundColor: 'blue',

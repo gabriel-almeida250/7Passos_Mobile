@@ -15,7 +15,7 @@ export default function BarraPesquisa(props) {
 
   const selecionaPesquisa = (categoria: any) => {
     pesquisar.Buscar(categoria);
-    props.navigation.navigate('ProdutoCategoria');
+    props.navigation.navigate('ProductsCategoriesScreen');
     setPesquisa("")
     console.log('Categoria clicaca', pesquisar.pesquisa);
 
