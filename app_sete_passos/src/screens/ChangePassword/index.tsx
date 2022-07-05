@@ -10,144 +10,112 @@ import {
 import {Text, Input, Icon, Button} from 'react-native-elements';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 import Loader from '../../components/Loader';
-import {ScrollView} from 'react-native';
 
-const Register = ({navigation}) => {
+const ChangePassword = ({navigation}) => {
   const [carregando, setCarregando] = useState(false);
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [foto, setFoto] = useState('');
-  const [senha, setSenha] = useState('');
-  const {register} = useContext(AutenticacaoContext);
+  const {usuario, trocarSenha} = useContext(AutenticacaoContext);
 
-  const [erroNome, setErroNome] = useState('');
-  const [erroEmail, setErroEmail] = useState('');
-  const [erroFoto, setErroFoto] = useState('');
+  const [senha, setSenha] = useState('');
+  const [confirmaSenha, setConfirmaSenha] = useState('');
+
   const [erroSenha, setErroSenha] = useState('');
-  const regexEmail =
-    /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$/;
+  const [erroConfirmaSenha, setErroConfirmaSenha] = useState('');
 
   const validarFormulario = () => {
     let error = false;
-    setErroNome('');
-    setErroEmail('');
     setErroSenha('');
-    setErroFoto('');
-
-    if (nome == '') {
-      setErroNome('O campo nome é obrigatório.');
-      error = true;
-      setCarregando(false);
-    }
-
-    if (email == '') {
-      setErroEmail('O campo email é obrigatório.');
-      error = true;
-      setCarregando(false);
-    }
+    setErroConfirmaSenha('');
 
     if (senha == '') {
-      setErroSenha('O campo senha é obrigatório.');
+      setErroSenha('Este campo é obrigatório.');
       error = true;
       setCarregando(false);
     }
 
-    if (foto == '') {
-      setErroFoto('O campo foto é obrigatório.');
+    if (confirmaSenha == '') {
+      setErroConfirmaSenha('Este campo é obrigatório.');
       error = true;
       setCarregando(false);
     }
 
-    if (!regexEmail.test(String(email).toLowerCase())) {
-      setErroEmail('Preencha o email corretamente.');
+    if (confirmaSenha !== senha) {
+      setErroConfirmaSenha('As senhas precisam ser iguais');
       error = true;
       setCarregando(false);
     }
     return !error;
   };
 
-  const cadastrarUsuario = async (nomeUsuario:string, emailUsuario: string, senhaUsuario: string,fileUsuario:string) => {
+  const atualizarSenha = async (senhaUsuario: string) => {
+    const email = usuario.email;
     setCarregando(true);
     Keyboard.dismiss();
 
     if (validarFormulario()) {
-      const respostaRegister = await register(nomeUsuario,emailUsuario, senhaUsuario,fileUsuario);
+      const respostaRegister = await trocarSenha(email, senhaUsuario);
       if (!respostaRegister) {
         setCarregando(false);
-        Alert.alert('Erro', '', [
+        Alert.alert('Não foi possivel atualizar a sua senha.', '', [
           {text: 'Ok'},
-          {text: 'Não foi possivel realizar o seu cadastro.'},
         ]);
       } else {
+        Alert.alert('Senha alterada com sucesso.', '', [
+            {text: 'Ok'},
+          ]);
         setCarregando(false);
-        navigation.navigate('LoginScreen');
+        navigation.goBack();
       }
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <View style={styles.container_image}>
         <Image
           source={{
             uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992879079575519272/Frame.png',
           }}
-          style={styles.imagem}
+          style={styles.texto_entrada}
         />
       </View>
 
-      <Text style={styles.titulos}>Nome:</Text>
-      <View style={styles.container_image}></View>
-      <View style={styles.containerPesquisa}>
-        <Input
-          inputContainerStyle={styles.inputs}
-          placeholder="Digite seu nome..."
-          errorMessage={erroNome}
-          onChangeText={valor => {
-            setNome(valor);
-            setErroNome('');
-          }}
+      {/* <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs}
+          placeholder="E-mail"
+          leftIcon={
+            <Icon name="mail" color="grey" type="ionocons" size={26} />
+          }
         />
-      </View>
+      </View> */}
 
-      <Text style={styles.titulos}>Email:</Text>
       <View style={styles.containerPesquisa}>
         <Input
           inputContainerStyle={styles.inputs}
-          placeholder="Digite seu email..."
-          errorMessage={erroEmail}
-          onChangeText={valor => {
-            setEmail(valor);
-            setErroEmail('');
-          }}
-        />
-      </View>
-
-      <Text style={styles.titulos}>Senha:</Text>
-      <View style={styles.containerPesquisa}>
-        <Input
-          inputContainerStyle={styles.inputs}
-          placeholder="Digite sua senha..."
+          placeholder="Nova senha"
           errorMessage={erroSenha}
           onChangeText={valor => {
             setSenha(valor);
             setErroSenha('');
           }}
+          leftIcon={<Icon name="lock" color="grey" type="ionocons" size={26} />}
+          secureTextEntry
         />
       </View>
 
-      <Text style={styles.titulos}>Foto:</Text>
       <View style={styles.containerPesquisa}>
         <Input
           inputContainerStyle={styles.inputs}
-          placeholder="Insira a url da sua foto de perfil"
-          errorMessage={erroFoto}
+          placeholder="Repita sua nova senha"
+          errorMessage={erroConfirmaSenha}
           onChangeText={valor => {
-            setFoto(valor);
-            setErroFoto('');
+            setConfirmaSenha(valor);
+            setErroConfirmaSenha('');
           }}
+          leftIcon={<Icon name="lock" color="grey" type="ionocons" size={26} />}
+          secureTextEntry
         />
       </View>
+
       <View
         style={{
           position: 'relative',
@@ -156,11 +124,11 @@ const Register = ({navigation}) => {
           alignItems: 'center',
         }}>
         <Button
-          title="Cadastrar"
+          title="Salvar"
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
-          onPress={() => cadastrarUsuario(nome,email,senha,foto)}
+          onPress={() => atualizarSenha(senha, confirmaSenha)}
         />
 
         {carregando && (
@@ -169,12 +137,12 @@ const Register = ({navigation}) => {
           </View>
         )}
       </View>
-    </ScrollView>
+    </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#0D6EFD',
     padding: 16,
     alignItems: 'stretch',
@@ -184,16 +152,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  titulos: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 3,
-  },
-  imagem: {
+  texto_entrada: {
     height: 65,
     width: 249,
-    marginBottom: 30,
+    marginBottom: 60,
+  },
+  icons: {
+    width: 17,
+    height: 19,
+  },
+  icons2: {
+    width: 19,
+    height: 17.46,
   },
   containerPesquisa: {
     width: '100%',
@@ -206,12 +176,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: 'white',
-    padding: 5,
-    marginTop: 35,
-    flex: 1,
+    marginTop: 33,
   },
-
   titulobotao: {
     color: '#0D6EFD',
     margin: 5,
@@ -221,7 +187,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 15,
     width: 260,
-    marginBottom: 15,
   },
   containerLoader: {
     translateY: -50,
@@ -244,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default ChangePassword;
