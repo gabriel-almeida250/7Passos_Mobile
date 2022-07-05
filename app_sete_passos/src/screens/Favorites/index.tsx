@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-elements";
 import { FlatList } from "react-native-gesture-handler";
+import Loader from "../../components/Loader";
 import { FavoritesContext } from "../../contexts/FavoritesContext";
 
 const Favorites = () => {
 
   const { listarProdutosFavoritos, removerItemProdutoFavoritos } = useContext(FavoritesContext);
   const [favorites, setFavorites] = useState();
+  const [carregando, setCarregando] = useState(true);
+
 
   useEffect(() => {
       getDadosFavorites();
@@ -21,7 +24,22 @@ const Favorites = () => {
       removerItemProdutoFavoritos(idProduto)
   }
 
+  setTimeout(() => {
+    if (favorites) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return(
+    <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+       {!carregando && (
+
       <FlatList 
       data={favorites}
       keyExtractor={(item, index) => index.toString()}
@@ -42,6 +60,8 @@ const Favorites = () => {
           )
       }}
       />
+      )}
+      </>
   )
 }
 
@@ -52,6 +72,19 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     marginTop:10
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
   }
 
 });
