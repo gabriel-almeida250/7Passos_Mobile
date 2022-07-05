@@ -8,6 +8,7 @@ import CardProduto from '../../components/CardProduto';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
+import Loader from '../../components/Loader';
 
 const Categories = ({ navigation}) => {
 
@@ -15,21 +16,11 @@ const Categories = ({ navigation}) => {
   const [loading, setLoading] = useState(false)
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     getDadosCategoria();
   }, []);
-
-  const selecionaPesquisa = async (categoria: any) => {
-    pesquisar.Buscar(categoria);
-    navigation.navigate({
-      name: 'ProdutoCategoriaScreen',
-      params: {
-        navigation: navigation,
-      },
-    });
-    console.log('Categoria clicaca', pesquisar.pesquisa);
-  };
 
   const getDadosCategoria = async () => {
     //setLoading(true)
@@ -65,11 +56,23 @@ const Categories = ({ navigation}) => {
     );
   };
 
+  setTimeout(() => {
+    if (categoria) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return (
     <View style={styles.container}>
     
-      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 30}}>Categorias</Text>
-    
+      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 30, marginBottom: 30}}>Categorias</Text>
+    {carregando && (
+         <View style={styles.containerLoader}>
+         <Loader cor="white" />
+         <Text style={styles.nomeLoader}>Carregando</Text>
+       </View>
+      )}
+      {!carregando && (
        <FlatList 
         data={categoria}
         keyExtractor={(item, index) => String(item.idCategoria)}
@@ -79,6 +82,7 @@ const Categories = ({ navigation}) => {
         // onEndReachedThreshold={0.1}
         // ListFooterComponent={ <FooterList load={loading}/>}
         />
+        )}
     </View>
   );
 }
@@ -94,15 +98,25 @@ const Categories = ({ navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#0D6EFD',
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    margin: 0
-    
   },
   cardCategoria:{
-    margin: 30,
+    backgroundColor:'#0D6EFD',
   },
   card_style: {
     backgroundColor: '#D9D9D9',
@@ -119,7 +133,6 @@ const styles = StyleSheet.create({
   imagens_cards: {
     height: 200,
     borderRadius: 5,
-
   },
 
   titulo_cards: {

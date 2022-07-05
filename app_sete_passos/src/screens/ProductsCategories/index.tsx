@@ -4,6 +4,7 @@ import { Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
 import BarraPesquisa from '../../components/BarraPesquisa';
 import CardProduto from '../../components/CardProduto';
+import Loader from '../../components/Loader';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
@@ -13,6 +14,7 @@ const ProductsCategories = ({ navigation}) => {
   const [produto, setProdutos] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const [semProduto, setSemProduto] = useState(false)
+  const [carregando, setCarregando] = useState(true);
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
 
@@ -52,12 +54,28 @@ const ProductsCategories = ({ navigation}) => {
     );
   }
 
+  
+  setTimeout(() => {
+    if (produto) {
+      setCarregando(false);
+    }
+  }, 2000);
+  
+
   return (
     <>
     <StatusBar
         barStyle="light-content"
         backgroundColor={styles.container.backgroundColor}
         />        
+        {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+      {!carregando && (
+
     <View style={styles.container}>
      
       {!semProduto &&(
@@ -79,6 +97,7 @@ const ProductsCategories = ({ navigation}) => {
           </View>
         )}
     </View>
+    )}
     </>
   );
 }
@@ -93,6 +112,19 @@ const ProductsCategories = ({ navigation}) => {
 // }
 
 const styles = StyleSheet.create({
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
+  },
   container: {
     flex: 1,
     backgroundColor: '#0D6EFD',
@@ -100,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 0,
     margin: 0
-    
   },
   card_style: {
     backgroundColor: 'blue',
