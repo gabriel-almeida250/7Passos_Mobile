@@ -6,7 +6,7 @@ import { FavoritesContext } from "../../contexts/FavoritesContext";
 
 const Favorites = () => {
 
-  const { listarProdutosFavoritos, removerItemProduto } = useContext(FavoritesContext);
+  const { listarProdutosFavoritos, removerItemProdutoFavoritos } = useContext(FavoritesContext);
   const [favorites, setFavorites] = useState();
 
   useEffect(() => {
@@ -17,8 +17,8 @@ const Favorites = () => {
       setFavorites(listarProdutosFavoritos());
   }
 
-  const deleteItem = (idProduto:number) => {
-      removerItemProduto(idProduto)
+  const deleteItemFavorito = (idProduto:number) => {
+      removerItemProdutoFavoritos(idProduto)
   }
 
   return(
@@ -35,7 +35,7 @@ const Favorites = () => {
                   <Text>{item.imagem_produto}</Text>
                   <Text>{item.descricao_protudo}</Text>
                   <Text>{item.preco_produto}</Text>
-                  <TouchableOpacity onPress={() => deleteItem(item.id_produto)}>
+                  <TouchableOpacity onPress={() => deleteItemFavorito(item.id_produto)}>
                       <Icon name="trash" color='black' type="font-awesome" size={36}/>
                   </TouchableOpacity>
               </View>
