@@ -14,6 +14,7 @@ import Loader from '../../components/Loader';
 import {StatusBar} from 'react-native';
 
 const Login = ({navigation}) => {
+  
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const {login} = useContext(AutenticacaoContext);
