@@ -14,7 +14,7 @@ const Home = ({navigation}) => {
   //console.log('Params:' + JSON.stringify(route));
   //console.log('token: ' + token);
   const {usuario} = useContext(AutenticacaoContext);
-  console.log('Usuario: ' + JSON.stringify(usuario));
+  // console.log('Usuario: ' + JSON.stringify(usuario));
   const [produtos, setProdutos] = useState<ProdutoType[]>([]);
   const [carregando, setCarregando] = useState(true);
 
