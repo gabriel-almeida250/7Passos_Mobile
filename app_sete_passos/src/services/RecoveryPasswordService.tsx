@@ -1,18 +1,16 @@
 import AxiosInstance from "../api/AxiosInstance";
 import jwt_decode from "jwt-decode";
 
-const RegisterService = async (nome:string, email:string, senha:string, foto:string) => {
+const RecoveryPasswordService = async (email:string, senha:string) => {
     var tokenDecodificado:any = null;
 
     let  dataPayload = {
-        "nomeUsuario":nome,
         "email":email,
-        "senha":senha,
-        "fotoPerfil":foto
+        "senha":senha
     }
 
     try {
-        const response = await AxiosInstance.post('autenticacao/cadastro',dataPayload);
+        const response = await AxiosInstance.post('autenticacao/recuperar-senha',dataPayload);
 
         if (response.status === 200) {
             console.log('Resposta do LoginService: ' + JSON.stringify(response.data));
@@ -34,4 +32,4 @@ const RegisterService = async (nome:string, email:string, senha:string, foto:str
   
 }
 
-export {RegisterService};
+export {RecoveryPasswordService};

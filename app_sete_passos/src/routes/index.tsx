@@ -15,7 +15,8 @@ import Profile from '../screens/Profile';
 import ProductsCategories from '../screens/ProductsCategories';
 import ProductDetails from '../screens/ProductDetails';
 import Cart from '../screens/Cart';
-import { SplashScreen } from '../screens/SplashScreen';
+import {SplashScreen} from '../screens/SplashScreen';
+import ChangePassword from '../screens/ChangePassword';
 
 const TabNavigation = createBottomTabNavigator();
 
@@ -43,7 +44,7 @@ const BottomTabNavigator = () => {
             case 'ProfileTabScreen':
               iconName = 'user';
               break;
-              case 'CartTabScreen':
+            case 'CartTabScreen':
               iconName = 'shopping-cart';
               break;
           }
@@ -68,11 +69,20 @@ const BottomTabNavigator = () => {
       />
       <TabNavigation.Screen name="CategoriesTabScreen" component={Categories} />
       <TabNavigation.Screen name="FavoritesTabScreen" component={Favorites} />
-      <TabNavigation.Screen name="CartTabScreen" component={Cart}  options={{
-        tabBarIcon: () => (
-          <BadgeIcone name='shopping-cart' type='font-awesome' size={24} color='black' />
-          )
-      }}/>
+      <TabNavigation.Screen
+        name="CartTabScreen"
+        component={Cart}
+        options={{
+          tabBarIcon: () => (
+            <BadgeIcone
+              name="shopping-cart"
+              type="font-awesome"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      />
       <TabNavigation.Screen name="ProfileTabScreen" component={Profile} />
     </TabNavigation.Navigator>
   );
@@ -84,11 +94,11 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <StackNavigation.Navigator>
-<StackNavigation.Screen
-  name="SplashScreen"
-  component={SplashScreen}
-  options={{headerShown: false}}
-/>
+        <StackNavigation.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
         <StackNavigation.Screen
           name="LoginScreen"
           component={Login}
@@ -117,7 +127,14 @@ const Routes = () => {
         <StackNavigation.Screen
           name="ProductsCategoriesScreen"
           component={ProductsCategories}
-          options={{headerShown: true, title: 'Produto Categoria', headerStyle:{backgroundColor:'#0D6EFD'} , headerTintColor:'white',headerShadowVisible:false, headerTitleAlign:'center' }}
+          options={{
+            headerShown: true,
+            title: 'Produto Categoria',
+            headerStyle: {backgroundColor: '#0D6EFD'},
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerTitleAlign: 'center',
+          }}
         />
         <StackNavigation.Screen
           name="ProductDetailsScreen"
@@ -130,7 +147,6 @@ const Routes = () => {
             headerShadowVisible: false,
             headerTitleAlign: 'center',
           }}
-         
         />
         <StackNavigation.Screen
           name="CartScreen"
@@ -155,6 +171,18 @@ const Routes = () => {
           options={{
             headerShown: true,
             title: 'Recupere sua senha',
+            headerStyle: {backgroundColor: '#0D6EFD'},
+            headerTintColor: 'white',
+            headerShadowVisible: false,
+            headerTitleAlign: 'center',
+          }}
+        />
+        <StackNavigation.Screen
+          name="ChangePasswordScreen"
+          component={ChangePassword}
+          options={{
+            headerShown: true,
+            title: 'Alterar senha',
             headerStyle: {backgroundColor: '#0D6EFD'},
             headerTintColor: 'white',
             headerShadowVisible: false,

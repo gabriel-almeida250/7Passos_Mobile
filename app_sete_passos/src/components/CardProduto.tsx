@@ -1,27 +1,28 @@
 import React from 'react';
-import { Card, Text } from 'react-native-elements';
-import { StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Card, Text} from 'react-native-elements';
+import {StyleSheet, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const CardProduto = (props: any) => {
   const dadosDoProduto = props.dados;
   const navigation = props.navigation;
   // console.log(dadosDoProduto)
+
+  const navigateToDetail = () => {
+    navigation.navigate({
+      name: 'ProdutoScreen',
+      params: {
+        dadosDoProduto: dadosDoProduto,
+      },
+    });
+  };
   return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate({
-          name: 'ProdutoScreen', params: {
-            dadosDoProduto: dadosDoProduto
-          }
-        })
-      }}
-    >
+    <TouchableOpacity onPress={() => navigateToDetail()}>
       <View>
         <Card containerStyle={styles.card_style}>
           <Card.Image
             style={styles.imagens_cards}
-            source={{ uri: dadosDoProduto.imagemProduto }}
+            source={{uri: dadosDoProduto.imagemProduto}}
           />
           <Card.Divider />
           <Card.Title style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
@@ -37,21 +38,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#D9D9D9',
     padding: 0,
-    width: '85%',
+    width: '84%',
     height: '78%',
     borderRadius: 5,
     borderWidth: 0,
     marginBottom: 18,
-
-    // elevation:10,
-    //shadowColor:'#000306',
+    elevation:10,
+    shadowColor:'#000306',
   },
   imagens_cards: {
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
     width: 164,
-    height: 151.13
+    height: 151.13,
   },
   titulo_cards: {
     fontSize: 18,
@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
     color: '#181717',
     fontStyle: 'italic',
     fontWeight: 'normal',
-  }
+  },
 });
 export default CardProduto;
