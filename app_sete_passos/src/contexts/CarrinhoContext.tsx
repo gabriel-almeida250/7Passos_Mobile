@@ -35,9 +35,10 @@ export const CarrinhoProvider= ({children}) => {
     const ultimoProdutoCadastrado = realm_carrinho
       .objects('Produto')
       .sorted('id_produto', true)[0];
-    const ultimoIdCadastrado =
+    let ultimoIdCadastrado =
       ultimoProdutoCadastrado == null ? 0 : ultimoProdutoCadastrado.id_produto;
-    const proximoId = ultimoIdCadastrado == null ? 1 : ultimoIdCadastrado + 1;
+    let proximoId = ultimoIdCadastrado == null ? 1 : ultimoIdCadastrado + 1;
+    
 
     realm_carrinho.write(() => {
       const produto = realm_carrinho.create('Produto', {

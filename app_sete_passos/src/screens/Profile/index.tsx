@@ -1,89 +1,120 @@
-import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Text, View, StyleSheet, Image, Dimensions} from 'react-native';
+import {Button} from 'react-native-elements';
+import Loader from '../../components/Loader';
+import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
+  const {usuario,setUsuario} = useContext(AutenticacaoContext);
+  const [carregando, setCarregando] = useState(true);
+ 
+  const logout = () => {
+    setUsuario({});
+    navigation.navigate("LoginScreen")
+  }
+
+  setTimeout(() => {
+    if (usuario) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return (
     <>
-      <View style={styles.container}>
-        <View>
-          <View style={styles.topo} />
-          <View style={styles.foto} />
-        </View>
-        <View style={styles.informacoes}>
-          <Text style={styles.usuario}>Nome do Usúario</Text>
-          <Text style={styles.email}>Email</Text>
-          <Text style={styles.senha}>Editar Senha</Text>
-        </View>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
 
+{!carregando && (
+
+      <View style={styles.container}>
+        <View style={styles.topo} />
+        <Image style={styles.foto} source={{uri: usuario.fotoPerfil}} />
+        <View style={styles.informacoes}>
+          <Text style={styles.input}>{usuario.name}</Text>
+          <Text style={styles.input}>{usuario.email}</Text>
+          <Button
+            buttonStyle={styles.botao}
+            titleStyle={styles.tituloBotao}
+            title="Editar Senha"
+            onPress={()=> navigation.navigate("PasswordRecoveryScreen")}
+          />
+          <Text onPress={()=> logout()} style={styles.btnSair}>Sair</Text>
+        </View>
       </View>
-      <View style={styles.botao}>
-        <Button
-          title='Sair'
-          color='#1c78ff'
-        />
-      </View>
+        )}
     </>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 30,
     alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
     justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
   },
   topo: {
     backgroundColor: '#1c78ff',
-    marginTop: -267,
     height: 150,
-    width: 360,
-    borderBottomLeftRadius: 80,
-    borderBottomRightRadius: 80,
+    width: Dimensions.get('window').width,
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 100,
   },
   foto: {
-    backgroundColor: '#1c78ff',
-    height: 160,
     width: 160,
-    borderRadius: 200 / 1,
-    marginTop: -100,
-    margin: 96,
+    height: 160,
+    borderRadius: 100,
+    marginTop: -85,
     borderColor: 'white',
     borderWidth: 3.5,
   },
-  title: {
-    color: 'black',
-    fontSize: 25
-  },
   informacoes: {
     padding: 25,
-    marginTop: -50,
-    marginBottom: -160
+    width: '90%',
+    marginTop: 30,
   },
-  usuario: {
-    borderBottomWidth: 2,
-    paddingBottom: 3,
-    fontSize: 25,
-    marginTop: -20,
-    textAlign: 'center'
-  },
-  email: {
-    borderBottomWidth: 2,
-    paddingBottom: 3,
-    fontSize: 25,
-    textAlign: 'center'
-  },
-  senha: {
-    borderBottomWidth: 2,
-    paddingBottom: 3,
-    fontSize: 25,
-    marginBottom: 25,
-    textAlign: 'center'
+  input: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#0D6EFD',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#0D6EFD',
   },
   botao: {
-    alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#0D6EFD',
+    width: '70%',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  tituloBotao: {
+    color: 'white',
+    fontSize: 20,
+  },
+  btnSair:{
+    marginTop:30,
+    fontSize:20,
+    color:"#BC2A28",
+    textAlign:"center"
   }
-
 });
 export default Profile;
