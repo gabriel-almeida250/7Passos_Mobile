@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { Card, Image } from 'react-native-elements';
 import { TextInput } from 'react-native-gesture-handler';
 import AxiosInstance from '../../api/AxiosInstance';
@@ -9,40 +9,51 @@ import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
 import Loader from '../../components/Loader';
+import { CategoriaType } from '../../models/CategoriaType';
 
 const Categories = ({ navigation}) => {
 
+  const perPage = 5;
   const [categoria, setCategoria] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
   const [carregando, setCarregando] = useState(true);
+  const [page, setPage] = useState(1)
+
+  const selecionaPesquisa = async (categoria: any) => {
+    pesquisar.Buscar(categoria);
+    navigation.navigate({
+      name: 'ProductsCategoriesScreen',
+      params: {
+        navigation: navigation,
+      },
+    });
+    console.log('Categoria clicaca', pesquisar.pesquisa);
+  };
 
   useEffect(() => {
-    getDadosCategoria();
+    loadApi();
   }, []);
 
-  const getDadosCategoria = async () => {
-    //setLoading(true)
-    AxiosInstance.get(`/categoria`, {
+  async function loadApi() {
+    if (loading) return;
+
+    setLoading(true);
+
+    const response = await   AxiosInstance.get(`/categoria?pagina=${page}&qtdRegistros=${perPage}`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
-      .then(result => {
-        console.log('Dados das categorias: ' + JSON.stringify(result.data));
-        setCategoria(result.data);
-       //setLoading(false)
-      })
-      .catch(error => {
-        console.log(
-          'Erro ao carregar a lista de categorias - ' + JSON.stringify(error),
-        );
-      });
-  };
+    setCategoria([...categoria, ...response.data]);
+    setPage(page +1);
+    setLoading(false)
+
+  }
 
   function ListCategoria({categoria}) {
     return (
       <TouchableOpacity 
-      onPress={() => navigation.navigate('ProductsCategoriesScreen')}
+      onPress={e => selecionaPesquisa(categoria)}
       >
       <Card containerStyle={styles.card_style}>
         <Card.Image
@@ -75,26 +86,26 @@ const Categories = ({ navigation}) => {
       {!carregando && (
        <FlatList 
         data={categoria}
-        keyExtractor={(item, index) => String(item.idCategoria)}
+        keyExtractor={(item) => String(item.idCategoria)}
         renderItem={({ item }) => <ListCategoria  categoria={item} />}
         style={styles.cardCategoria}
-        // onEndReached={getDadosProduto}
-        // onEndReachedThreshold={0.1}
-        // ListFooterComponent={ <FooterList load={loading}/>}
+        onEndReached={loadApi}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={ <FooterList load={loading}/>}
         />
         )}
     </View>
   );
 }
 
-// function FooterList({load}) {
-//   if (!load) return null;
-//   return(
-//     <View style={styles.loading}>
-//       <ActivityIndicator size={25} color='red' />
-//     </View>
-//   )
-// }
+function FooterList({load}) {
+  if (!load) return null;
+  return(
+    <View style={styles.loading}>
+      <ActivityIndicator size={25} color='white' />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +144,7 @@ const styles = StyleSheet.create({
   imagens_cards: {
     height: 200,
     borderRadius: 5,
+    resizeMode:'contain'
   },
 
   titulo_cards: {
@@ -157,6 +169,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 20,
     marginBottom: 10
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
   }
 });
 

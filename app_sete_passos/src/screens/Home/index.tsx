@@ -23,7 +23,7 @@ const Home = ({navigation}) => {
   }, []);
 
   const getProdutos = async () => {
-    AxiosInstance.get(`/produto`, {
+    AxiosInstance.get(`/produto?pagina=1&qtdRegistros=4`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
       .then(result => {
@@ -36,6 +36,7 @@ const Home = ({navigation}) => {
         );
       });
   };
+  
   function ListProduto({produtos}) {
     return <CardProduto navigation={navigation} dados={produtos} />;
   }
