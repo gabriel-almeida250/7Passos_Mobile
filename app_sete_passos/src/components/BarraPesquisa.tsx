@@ -79,9 +79,9 @@ export default function BarraPesquisa(props) {
 const styles = StyleSheet.create({
   containerPesquisa: {
     width: '100%',
-    maxWidth:305,
-    backgroundColor: '#D9D9D9',
-    borderRadius: 15,
+    maxWidth:346.5,
+    backgroundColor: 'white',
+    borderRadius: 10,
     height: 43,
     flex: 1,
     alignItems:'center',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: '#D9D9D9',
+    borderBottomColor: 'white',
     padding: 5,
     marginTop:30,
     flex: 1,
@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     position:'absolute',
     zIndex:1,
-    top:60,
+    top:42,
     left: 15,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'white',
     borderRadius: 10,
   },
   pesquisaResultado: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: 'white',
     padding: 10,
     paddingLeft:15,
     alignItems: 'stretch',

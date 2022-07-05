@@ -22,12 +22,7 @@ const PasswordRecovery = () => {
         <Input inputContainerStyle={styles.inputs}
           placeholder="E-mail"
           leftIcon={
-            <Image
-              source={{
-                uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992885692105502770/icons8-email-aberto-50_1.png',
-              }}
-              style={styles.icons}
-            />
+            <Icon name="mail" color="grey" type="ionocons" size={26} />
           }
         />
       </View>
@@ -36,12 +31,7 @@ const PasswordRecovery = () => {
         <Input inputContainerStyle={styles.inputs}
             placeholder="Senha"
             leftIcon={
-              <Image
-                source={{
-                  uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992885691870617660/icons8-padlock-64_1.png',
-                }}
-                style={styles.icons2}
-              />
+              <Icon name="lock" color="grey" type="ionocons" size={26} />
             }
             secureTextEntry
           />
@@ -52,12 +42,7 @@ const PasswordRecovery = () => {
         <Input inputContainerStyle={styles.inputs}
             placeholder="Repita sua senha"
             leftIcon={
-              <Image
-                source={{
-                  uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992885691870617660/icons8-padlock-64_1.png',
-                }}
-                style={styles.icons2}
-              />
+              <Icon name="lock" color="grey" type="ionocons" size={26} />
             }
             secureTextEntry
           />
@@ -122,10 +107,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: 'white',
-    padding: 5,
-    marginTop:45,
-    flex: 1,
+    marginTop:33,
+  
   },
   titulobotao: {
     color: '#0D6EFD',

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   Alert,
   Keyboard,
   Image,
+  BackHandler,
 } from 'react-native';
 import {Text, Input, Icon, Button} from 'react-native-elements';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
@@ -13,10 +14,17 @@ import Loader from '../../components/Loader';
 import {StatusBar} from 'react-native';
 
 const Login = ({navigation}) => {
+  
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const {login} = useContext(AutenticacaoContext);
   const [carregando, setCarregando] = useState(false);
+
+  useEffect(() =>{
+    BackHandler.addEventListener('hardwareBackPress', () =>{
+      return true
+    })
+  }, [])
 
   const handleLogin = async (email: string, senha: string) => {
     console.log(`Email: ${email} - Senha: ${senha}`);
@@ -57,12 +65,7 @@ const Login = ({navigation}) => {
           onChangeText={setEmail}
           value={email}
           leftIcon={
-            <Image
-              source={{
-                uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992885691870617660/icons8-padlock-64_1.png',
-              }}
-              style={styles.icons}
-            />
+            <Icon name="mail" color="grey" type="ionocons" size={26} />
           }
         />
       </View>
@@ -72,15 +75,10 @@ const Login = ({navigation}) => {
           placeholder="Senha"
           onChangeText={setSenha}
           value={senha}
+          secureTextEntry={true}
           leftIcon={
-            <Image
-              source={{
-                uri: 'https://cdn.discordapp.com/attachments/972547744516415540/992885692105502770/icons8-email-aberto-50_1.png',
-              }}
-              style={styles.icons2}
-            />
+            <Icon name="lock" color="grey" type="ionocons" size={26} />
           }
-          secureTextEntry
         />
       </View>
       <TouchableOpacity
@@ -96,11 +94,12 @@ const Login = ({navigation}) => {
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
-        />{carregando && (
-          <View style={styles.containerLoader}>
+          />{carregando && (
+            <View style={styles.containerLoader}>
             <Loader cor="black" />
           </View>
         )}
+        </TouchableOpacity>
         <Text
           onPress={() => navigation.navigate('PasswordRecoveryScreen')}
           style={styles.texto_senha}>
@@ -115,7 +114,6 @@ const Login = ({navigation}) => {
           </Text>
         </Text>
         
-      </TouchableOpacity>
     </View>
   );
 };
@@ -155,11 +153,8 @@ const styles = StyleSheet.create({
   },
   inputs: {
     color: 'black',
-    borderBottomColor: 'white',
-    padding: 5,
-    marginTop:45,
-    flex: 1,
-  },
+    marginTop:33,
+    },
   titulobotao: {
     color: '#0D6EFD',
     margin: 5,
