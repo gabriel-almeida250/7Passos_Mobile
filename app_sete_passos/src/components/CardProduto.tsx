@@ -25,7 +25,7 @@ const CardProduto = (props: any) => {
           />
           <Card.Divider />
           <Card.Title style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
-          <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto}</Card.Title>
+          <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
 
         </Card>
       </View>
@@ -37,14 +37,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#D9D9D9',
     padding: 0,
-    width: '85%',
+    width: '100%',
     height: '78%',
     borderRadius: 5,
     borderWidth: 0,
     marginBottom: 18,
-
-    // elevation:10,
-    //shadowColor:'#000306',
+    elevation:10,
+    shadowColor:'#000306',
   },
   imagens_cards: {
     borderTopLeftRadius: 5,
