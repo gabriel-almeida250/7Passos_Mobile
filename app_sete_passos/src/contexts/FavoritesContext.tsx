@@ -22,9 +22,6 @@ export const FavoritesProvider= ({children}) => {
   const listarProdutosFavoritos = () => {
     return realm_favorites.objects('Produto');
   };
-  const contaQuantidadeProdutos = () => {
-    return realm_favorites.objects('Produto').length;
-  };
   const adicionarProdutoFavoritos = (
     _sku: string,
     _nome: string,
@@ -53,7 +50,7 @@ export const FavoritesProvider= ({children}) => {
     console.log(JSON.stringify(realm_favorites.objects('Produto')));
   };
 
-  const removerItemProduto = (_id) => {
+  const removerItemProdutoFavoritos = (_id) => {
     realm_favorites.write(() =>
       realm_favorites.delete(
         realm_favorites.objects('Produto').filter(produto => produto.id_produto == _id),
@@ -65,9 +62,8 @@ export const FavoritesProvider= ({children}) => {
     <FavoritesContext.Provider
       value={{
         listarProdutosFavoritos,
-        contaQuantidadeProdutos,
         adicionarProdutoFavoritos,
-        removerItemProduto,
+        removerItemProdutoFavoritos,
       }}>
       {children}
     </FavoritesContext.Provider>
