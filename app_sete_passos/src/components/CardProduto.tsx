@@ -25,8 +25,8 @@ const CardProduto = (props: any) => {
             source={{uri: dadosDoProduto.imagemProduto}}
           />
           <Card.Divider />
-          <Card.Title style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
-          <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto}</Card.Title>
+          <Card.Title numberOfLines={1} style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
+          <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
 
         </Card>
       </View>

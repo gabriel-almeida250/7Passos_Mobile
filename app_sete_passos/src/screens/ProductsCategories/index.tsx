@@ -9,19 +9,21 @@ import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
 import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
 
+
 const ProductsCategories = ({ navigation}) => {
 
-  const perPage = 2;
+  const perPage = 4;
   const [produto, setProdutos] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const [semProduto, setSemProduto] = useState(false)
   const [carregando, setCarregando] = useState(true);
   const {usuario} = useContext(AutenticacaoContext);
+
   const [page, setPage] = useState(1)
  
   useEffect(() => {
     loadApi();
-  }, []);
+  }, [page]);
 
   async function loadApi() {
     if (loading) return;
