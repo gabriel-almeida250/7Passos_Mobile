@@ -1,36 +1,43 @@
 import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native';
 import AxiosInstance from '../../api/AxiosInstance';
 import CardProduto from '../../components/CardProduto';
 import Loader from '../../components/Loader';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
+import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
 
 
 const ProductsCategories = ({ navigation}) => {
 
-  const perPage = 6;
-  const [produto, setProdutos] = useState<ProdutoType[]>([]);
+  const perPage = 10;
+  const [produto, setProduto] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const [semProduto, setSemProduto] = useState(false)
   const [carregando, setCarregando] = useState(true);
+  const pesquisar = usePesquisar();
   const {usuario} = useContext(AutenticacaoContext);
 
   const [page, setPage] = useState(0)
- 
-  
   
   async function loadApi() {
     if (loading) return;
 
     setLoading(true);
 
-    const response = await   AxiosInstance.get(`/produto?pagina=${page}&qtdRegistros=${perPage}&idCategoria=1`, {
-      headers: {Authorization: `Bearer ${usuario.token}`},
+console.log(`/produto?pagina=${page}&qtdRegistros=${perPage}`);
+
+
+    const response = await   AxiosInstance.get(`/produto/categoria?pagina=${page}&qtdRegistros=${perPage}&idCategoria=${pesquisar.pesquisa.idCategoria}`, {
+      headers: {Authorization: `Bearer ${usuario.token}`}
+    }).then(res =>{
+    
+          setProduto([...produto,res.data]);
+          //setSemProduto(false)
+      
+      setLoading(false)
     })
-    setProdutos([...produto, ...response.data]);
-    setLoading(false)
   }
 
   function ListProduto({produto}) {
@@ -55,9 +62,9 @@ const ProductsCategories = ({ navigation}) => {
     }
   }, 2000);
 
-  useFocusEffect(useCallback(() => {
+  useEffect(() => {
     loadApi();
-  } , [page]));
+  } , []);
   
   return (
     <>
@@ -78,8 +85,8 @@ const ProductsCategories = ({ navigation}) => {
       {!semProduto &&(
        <FlatList 
         data={produto}
-        keyExtractor={(item, index) => String(item.idProduto)}
-        renderItem={({ item }) => <ListProduto  produto={item} />}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index}) => <ListProduto  produto={item} />}
         numColumns={2}
         onEndReached={loadApi}
         onEndReachedThreshold={0.5}
