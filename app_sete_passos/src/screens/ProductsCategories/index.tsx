@@ -1,61 +1,75 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, {useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import AxiosInstance from '../../api/AxiosInstance';
 import CardProduto from '../../components/CardProduto';
 import Loader from '../../components/Loader';
-import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
-import { usePesquisar } from '../../contexts/PesquisaContext';
-import { ProdutoType } from '../../models/ProdutoType';
+import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
+import {usePesquisar} from '../../contexts/PesquisaContext';
+import {ProdutoType} from '../../models/ProdutoType';
 
-
-const ProductsCategories = ({ navigation}) => {
-
-  const perPage = 10;
+const ProductsCategories = ({navigation}) => {
+  const perPage = 4;
   const [produto, setProduto] = useState<ProdutoType[]>([]);
-  const [loading, setLoading] = useState(false)
-  const [semProduto, setSemProduto] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [semProduto, setSemProduto] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const pesquisar = usePesquisar();
   const {usuario} = useContext(AutenticacaoContext);
+  const [terminouDeCarregar, setTerminouDeCarregar] = useState(false);
 
-  const [page, setPage] = useState(0)
-  
+  const [page, setPage] = useState(0);
+
   async function loadApi() {
     if (loading) return;
-
     setLoading(true);
-
-console.log(`/produto?pagina=${page}&qtdRegistros=${perPage}`);
-
-
-    const response = await   AxiosInstance.get(`/produto/categoria?pagina=${page}&qtdRegistros=${perPage}&idCategoria=${pesquisar.pesquisa.idCategoria}`, {
-      headers: {Authorization: `Bearer ${usuario.token}`}
-    }).then(res =>{
-    
-          setProduto([...produto,res.data]);
-          //setSemProduto(false)
-      
-      setLoading(false)
-    })
+    if (terminouDeCarregar == false) {
+      await AxiosInstance.get(
+        `/produto/categoria?pagina=${page}&qtdRegistros=${perPage}&idCategoria=${pesquisar.pesquisa.idCategoria}`,
+        {
+          headers: {Authorization: `Bearer ${usuario.token}`},
+        },
+      ).then(res => {
+        console.log(res.data)
+        setProduto([...produto, ...res.data]);
+        setLoading(false);
+        if (res.data.length >= perPage) {
+          setPage(page + 1);
+        } else {
+          setTerminouDeCarregar(true);
+        }
+      });
+    }else{
+      setLoading(false);
+    }
   }
 
   function ListProduto({produto}) {
     return (
-      <TouchableOpacity onPress={() => {
-        navigation.navigate({
-          name: 'ProductDetailsScreen',
-          params: {
-            dadosDoProduto: produto,
-          },
-        });
-      }}>
-    <CardProduto dados={produto}/>
-    </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate({
+            name: 'ProductDetailsScreen',
+            params: {
+              dadosDoProduto: produto,
+            },
+          });
+        }}>
+        <CardProduto dados={produto} />
+      </TouchableOpacity>
     );
   }
-  
-  
+
   setTimeout(() => {
     if (produto) {
       setCarregando(false);
@@ -63,56 +77,54 @@ console.log(`/produto?pagina=${page}&qtdRegistros=${perPage}`);
   }, 2000);
 
   useEffect(() => {
-    loadApi();
-  } , []);
-  
+    if (terminouDeCarregar == false) {
+      loadApi();
+    }
+  }, []);
+
   return (
     <>
-    <StatusBar
+      <StatusBar
         barStyle="light-content"
         backgroundColor={styles.container.backgroundColor}
-        />        
-        {carregando && (
-      <View style={styles.containerLoader}>
-      <Loader cor="white" />
-      <Text style={styles.nomeLoader}>Carregando</Text>
-    </View>
-   )}
+      />
+      {carregando && (
+        <View style={styles.containerLoader}>
+          <Loader cor="white" />
+          <Text style={styles.nomeLoader}>Carregando</Text>
+        </View>
+      )}
       {!carregando && (
-
-    <View style={styles.container}>
-     
-      {!semProduto &&(
-       <FlatList 
-        data={produto}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index}) => <ListProduto  produto={item} />}
-        numColumns={2}
-        onEndReached={loadApi}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={ <FooterList load={loading}/>}
-        />
-        )}
-        {semProduto &&(
-          <View>
-            <Text>
-              {'Nenhum Produto encotrado'}
-            </Text>
-          </View>
-        )}
-    </View>
-    )}
+        <View style={styles.container}>
+          {!semProduto && (
+            <FlatList
+              data={produto}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item, index}) => <ListProduto produto={item} />}
+              numColumns={2}
+              onEndReached={loadApi}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={<FooterList load={loading} />}
+            />
+          )}
+          {semProduto && (
+            <View>
+              <Text>{'Nenhum Produto encotrado'}</Text>
+            </View>
+          )}
+        </View>
+      )}
     </>
   );
-}
+};
 
 function FooterList({load}) {
   if (!load) return null;
-  return(
+  return (
     <View style={styles.loading}>
-      <ActivityIndicator size={25} color='red' />
+      <ActivityIndicator size={25} color="red" />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -127,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor:'#0D6EFD'
+    backgroundColor: '#0D6EFD',
   },
   container: {
     flex: 1,
@@ -146,12 +158,11 @@ const styles = StyleSheet.create({
     maxHeight: 400,
     borderRadius: 5,
     borderWidth: 0,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   imagens_cards: {
     height: 200,
     borderRadius: 5,
-
   },
   titulo_cards: {
     fontSize: 18,
@@ -173,8 +184,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     fontSize: 20,
     paddingHorizontal: 20,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 export default ProductsCategories;
