@@ -21,6 +21,7 @@ import ChangePassword from '../screens/ChangePassword';
 const TabNavigation = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  
   const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
 
   const BadgeIcone = withBadge(contaQuantidadeProdutos())(Icon);

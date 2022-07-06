@@ -28,6 +28,7 @@ const ProductDetails = ({ route, navigation }) => {
   
   const handleAddProdutoFavoritos = () => {
     adicionarProdutoFavoritos(
+      dadosDoProduto.sku,
       dadosDoProduto.nomeProduto,
       dadosDoProduto.descricaoProduto,
       dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,

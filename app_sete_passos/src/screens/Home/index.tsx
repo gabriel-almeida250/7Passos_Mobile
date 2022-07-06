@@ -54,6 +54,7 @@ const Home = ({navigation}) => {
     </TouchableOpacity>
     );
   }
+  
   setTimeout(() => {
     if (produtos) {
       setCarregando(false);
