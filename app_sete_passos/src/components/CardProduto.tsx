@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#D9D9D9',
     padding: 0,
-    width: '84%',
-    height: '78%',
+    width: 160,
+    height: 240,
     borderRadius: 5,
     borderWidth: 0,
     marginBottom: 18,
@@ -50,8 +50,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
-    width: 164,
-    height: 151.13,
+    resizeMode:'contain'
   },
   titulo_cards: {
     fontSize: 18,
