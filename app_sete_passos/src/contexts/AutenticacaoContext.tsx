@@ -1,11 +1,10 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useState} from "react";
 import { UsuarioType } from "../models/UsuarioType";
 import { LoginService } from "../services/LoginService";
 import { RecoveryPasswordService } from "../services/RecoveryPasswordService";
 import { RegisterService } from "../services/RegisterService";
 
 export const AutenticacaoContext = createContext({});
-
 
 export const AutenticacaoProvider = ({children}) => {
     

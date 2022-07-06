@@ -14,6 +14,7 @@ ProdutoSchema.schema = {
     preco_produto: 'double',
     imagem_produto: 'string',
   },
+
 };
 
 let realm_carrinho = new Realm({schema: [ProdutoSchema], schemaVersion: 1});
@@ -61,6 +62,8 @@ export const CarrinhoProvider= ({children}) => {
       ),
     )
   }
+
+  realm_carrinho.close
 
   return (
     <CarrinhoContext.Provider
