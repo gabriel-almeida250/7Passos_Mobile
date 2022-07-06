@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   nomeLoader: {
     marginTop: 20,
     fontSize: 25,
-    color: 'white',
+    color: '#0D6EFD',
     textAlign: 'center',
   },
   containerLoader: {
