@@ -40,6 +40,8 @@ const Favorites = ({navigation}) => {
         </View>
       )}
       {!carregando && (
+        <View style={styles.Container}>
+        <Text style={styles.tituloPagina}>Favorito(s)</Text>
         <FlatList
           data={favorites}
           keyExtractor={(item, index) => index.toString()}
@@ -49,7 +51,7 @@ const Favorites = ({navigation}) => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ProductsDetailsScreen');
+                  navigation.navigate('ProductDetailsScreen');
                 }}>
                 <View style={styles.container_favorito}>
                   <Card containerStyle={styles.card_style}>
@@ -83,19 +85,31 @@ const Favorites = ({navigation}) => {
             );
           }}
         />
+        </View>
       )}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  Container:{
+    flex:1,
+    backgroundColor:'#0D6EFD',
+  },
+  tituloPagina:{
+    textAlign:'center',
+     color:'white',
+      marginTop: 20,
+       fontSize: 30,
+        marginBottom: 10
+  },
   container_favorito:{
-  marginTop:25
+  marginTop:25,
   },
   nomeLoader: {
     marginTop: 20,
     fontSize: 25,
-    color: '#0D6EFD',
+    color: 'white',
     textAlign: 'center',
   },
   containerLoader: {
