@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {  Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Icon, Text } from "react-native-elements";
+import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 import Loader from "../../components/Loader";
 import { CarrinhoContext } from "../../contexts/CarrinhoContext";
@@ -11,33 +12,33 @@ const Cart = () => {
   const [quantidade, setQuantidade] = useState(1)
   const [carregando, setCarregando] = useState(true);
   
-  useEffect(() => {
-      getDadosCarrinho();
-    }, []);
-    
   const getDadosCarrinho = () => {
     console.log("AQuiiiiiiiiiiiiiiiiiiiiiii ",carrinho);
-
-      setCarrinho(listarProdutos());
+    
+    setCarrinho(listarProdutos());
   }
-
+  
   const deleteItem = (idProduto:number) => {
-      removerItemProduto(idProduto)
+    removerItemProduto(idProduto)
   }
-
+  
   function removeItem(idProduto:number){
     setQuantidade(quantidade - 1)
-
+    
     if(quantidade < 1 ){
-        deleteItem(idProduto)
+      deleteItem(idProduto)
     }
-}
-
-setTimeout(() => {
-  if (carrinho) {
-    setCarregando(false);
   }
-}, 2000);
+  
+  setTimeout(() => {
+    if (carrinho) {
+      setCarregando(false);
+    }
+  }, 2000);
+  
+  useFocusEffect(useCallback(() => {
+    getDadosCarrinho();
+  } , []));
 
   return(
     <>
@@ -52,17 +53,22 @@ setTimeout(() => {
       data={carrinho}
       keyExtractor={(item, index) => index.toString()}
       style={{backgroundColor:'#0D6EFD'}}
+      ListHeaderComponent={
+        <View>
+      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 30, marginBottom: 10}}>Meu Carrinho</Text>
+        </View>
+      }
       renderItem={({item, index}) =>{
+        
           return(
-              
               <View style={styles.container_flatlist}>
                   <View >
-                  <Image source={{uri:item.imagem_produto}} style={{width: 113, height: 97, alignSelf:"flex-start", borderRadius: 10}}/>
+                  <Image source={{uri:item.imagem_produto}} style={{width: 113, height: 97, alignSelf:"flex-start", borderRadius: 10, resizeMode:'contain'}}/>
                   </View>
                   <View style={{flex: 1, alignSelf:"center"}}>
                   <Text style={styles.text}>{item.nome_produto}</Text>
-                  <Text style={styles.text}>{item.descricao_protudo}</Text>
-                  <Text style={styles.text}>{item.preco_produto}</Text>
+                  <Text style={styles.text} numberOfLines={1}>{item.descricao_protudo}</Text>
+                  <Text style={styles.text}>{item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Text>
                     <View style={{alignSelf: "center", flexDirection: "row", flex:1}}>
                     <Button 
                     style={{width: 33,height: 16}}
@@ -85,6 +91,11 @@ setTimeout(() => {
               </View>
           )
       }}
+      ListFooterComponent={
+        <View style={{marginLeft:20}}>
+          <Text style={{color:'white'}}>Total Compra: R${carrinho.preco_produto}</Text>
+        </View>
+      }
       />
       )}
       </>

@@ -1,42 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, RefreshControl } from 'react-native';
-import { Card } from 'react-native-elements';
 import AxiosInstance from '../../api/AxiosInstance';
-import BarraPesquisa from '../../components/BarraPesquisa';
 import CardProduto from '../../components/CardProduto';
 import Loader from '../../components/Loader';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
-import { usePesquisar } from '../../contexts/PesquisaContext';
 import { ProdutoType } from '../../models/ProdutoType';
 
 
 const ProductsCategories = ({ navigation}) => {
 
-  const perPage = 4;
+  const perPage = 6;
   const [produto, setProdutos] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false)
   const [semProduto, setSemProduto] = useState(false)
   const [carregando, setCarregando] = useState(true);
   const {usuario} = useContext(AutenticacaoContext);
 
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
  
-  useEffect(() => {
-    loadApi();
-  }, [page]);
-
+  
+  
   async function loadApi() {
     if (loading) return;
 
     setLoading(true);
 
-    const response = await   AxiosInstance.get(`/produto?pagina=${page}&qtdRegistros=${perPage}`, {
+    const response = await   AxiosInstance.get(`/produto?pagina=${page}&qtdRegistros=${perPage}&idCategoria=1`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
     setProdutos([...produto, ...response.data]);
-    setPage(page +1);
     setLoading(false)
-
   }
 
   function ListProduto({produto}) {
@@ -53,15 +47,18 @@ const ProductsCategories = ({ navigation}) => {
     </TouchableOpacity>
     );
   }
-
+  
   
   setTimeout(() => {
     if (produto) {
       setCarregando(false);
     }
   }, 2000);
-  
 
+  useFocusEffect(useCallback(() => {
+    loadApi();
+  } , [page]));
+  
   return (
     <>
     <StatusBar

@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
-import AxiosInstance from '../../api/AxiosInstance';
-import { ProdutoType } from '../../models/ProdutoType';
-import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
-import CardProduto from '../../components/CardProduto';
+import { Text, TouchableOpacity, View, StyleSheet, Image, Dimensions, Alert } from 'react-native';
 import { CarrinhoContext } from '../../contexts/CarrinhoContext';
-import { Icon, Input } from 'react-native-elements';
+import { Icon} from 'react-native-elements';
 import { FavoritesContext } from '../../contexts/FavoritesContext';
 import Loader from '../../components/Loader';
 
@@ -19,7 +15,8 @@ const ProductDetails = ({ route, navigation }) => {
   const [carregando, setCarregando] = useState(true);
 
 
-  const handleAddProduto = () => {
+  const handleAddProdutoCarrinho = () => {
+    Alert.alert('Produto adicionado ao carrinho')
     adicionarProduto(
       dadosDoProduto.sku,
       dadosDoProduto.nomeProduto,
@@ -28,9 +25,9 @@ const ProductDetails = ({ route, navigation }) => {
       dadosDoProduto.imagemProduto,
     );
   };
-  const handleAddProduto2 = () => {
+  
+  const handleAddProdutoFavoritos = () => {
     adicionarProdutoFavoritos(
-      dadosDoProduto.sku,
       dadosDoProduto.nomeProduto,
       dadosDoProduto.descricaoProduto,
       dadosDoProduto.precoProduto ? dadosDoProduto.precoProduto : 0,
@@ -61,7 +58,7 @@ const ProductDetails = ({ route, navigation }) => {
       <View style={styles.container}>
       <TouchableOpacity
           style={styles.btt_favoritar}
-          onPress={() => handleAddProduto2()}>
+          onPress={() => handleAddProdutoFavoritos()}>
           {favorito &&
             <Icon name="heart" color="red" type="font-awesome" size={25} />}
           {!favorito &&
@@ -107,7 +104,7 @@ const ProductDetails = ({ route, navigation }) => {
 
       <View style={styles.container_comprar}>
         <TouchableOpacity
-          onPress={() => handleAddProduto()}
+          onPress={() => handleAddProdutoCarrinho()}
           style={styles.btt_comprar}>
           <Text style={styles.txt_btt_comprar}>Comprar</Text>
         </TouchableOpacity>
