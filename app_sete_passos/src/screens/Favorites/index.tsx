@@ -71,7 +71,7 @@ const Favorites = ({navigation}) => {
                   {/* </View> */}
                 <Card.Divider />
                 <Card.Title numberOfLines={1} style={styles.titulo_cards}>{item.nome_produto}</Card.Title>
-                <Card.Title style={styles.valor_cards}>R$ {item.preco_produto.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
+                <Card.Title style={styles.valor_cards}>R$ {item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
       
               </Card>
             </View>
