@@ -5,19 +5,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const CardProduto = (props: any) => {
   const dadosDoProduto = props.dados;
-  const navigation = props.navigation;
-  // console.log(dadosDoProduto)
+  
 
-  const navigateToDetail = () => {
-    navigation.navigate({
-      name: 'ProdutoScreen',
-      params: {
-        dadosDoProduto: dadosDoProduto,
-      },
-    });
-  };
   return (
-    <TouchableOpacity onPress={() => navigateToDetail()}>
       <View>
         <Card containerStyle={styles.card_style}>
           <Card.Image
@@ -30,7 +20,6 @@ const CardProduto = (props: any) => {
 
         </Card>
       </View>
-    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
