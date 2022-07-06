@@ -1,30 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View,Image, Alert } from "react-native";
-import { Icon, Text } from "react-native-elements";
-import { FlatList } from "react-native-gesture-handler";
-import Loader from "../../components/Loader";
-import { FavoritesContext } from "../../contexts/FavoritesContext";
-import { Card } from "react-native-elements";
+import React, {useContext, useEffect, useState} from 'react';
+import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
+import {Icon, Text} from 'react-native-elements';
+import {FlatList} from 'react-native-gesture-handler';
+import Loader from '../../components/Loader';
+import {FavoritesContext} from '../../contexts/FavoritesContext';
+import {Card} from 'react-native-elements';
 
 const Favorites = ({navigation}) => {
-
-  const { listarProdutosFavoritos, removerItemProdutoFavoritos } = useContext(FavoritesContext);
+  const {listarProdutosFavoritos, removerItemProdutoFavoritos} =
+    useContext(FavoritesContext);
   const [favorites, setFavorites] = useState();
   const [carregando, setCarregando] = useState(true);
 
-
   useEffect(() => {
-      getDadosFavorites();
+    getDadosFavorites();
   }, []);
 
   const getDadosFavorites = () => {
-      setFavorites(listarProdutosFavoritos());
-  }
+    setFavorites(listarProdutosFavoritos());
+  };
 
-  const deleteItemFavorito = (idProduto:number) => {
-    Alert.alert("Produto removido dos favoritos!")
-      removerItemProdutoFavoritos(idProduto)
-  }
+  const deleteItemFavorito = (idProduto: number) => {
+    Alert.alert('Produto removido dos favoritos!');
+    removerItemProdutoFavoritos(idProduto);
+  };
 
   setTimeout(() => {
     if (favorites) {
@@ -32,60 +31,67 @@ const Favorites = ({navigation}) => {
     }
   }, 2000);
 
-  return(
+  return (
     <>
-    {carregando && (
-      <View style={styles.containerLoader}>
-      <Loader cor="white" />
-      <Text style={styles.nomeLoader}>Carregando</Text>
-    </View>
-   )}
-       {!carregando && (
-
-      <FlatList 
-      data={favorites}
-      keyExtractor={(item, index) => index.toString()}
-      numColumns={2}
-      renderItem={({item, index}) =>{
-         
-        return(
-            <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("ProductsDetailsScreen")
-            }}
-          >
-            <View>
-              <Card containerStyle={styles.card_style}>
-               
-                <Card.Image
-                  style={styles.imagens_cards}
-                  source={{uri:item.imagem_produto}}
-                />
-                
-                {/* <View> */}
-                <TouchableOpacity 
-                  style={{alignSelf:"flex-end", bottom: 145,  right:7, margin:0, padding:0,}}
-                  onPress={() => deleteItemFavorito(item.id_produto)}>
-                      <Icon name="heart" color="red" type="font-awesome" size={25}/>
-                  </TouchableOpacity>
-                  {/* </View> */}
-                <Card.Divider />
-                <Card.Title numberOfLines={1} style={styles.titulo_cards}>{item.nome_produto}</Card.Title>
-                <Card.Title style={styles.valor_cards}>R$ {item.preco_produto.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
-      
-              </Card>
-            </View>
-          </TouchableOpacity>
-          )
-      }}
-      
-      />
+      {carregando && (
+        <View style={styles.containerLoader}>
+          <Loader cor="white" />
+          <Text style={styles.nomeLoader}>Carregando</Text>
+        </View>
       )}
-      </>
-  )
-}
+      {!carregando && (
+        <FlatList
+          data={favorites}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          style={{backgroundColor:'#0D6EFD'}}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ProductsDetailsScreen');
+                }}>
+                <View style={styles.container_favorito}>
+                  <Card containerStyle={styles.card_style}>
+                    <Card.Image
+                      style={styles.imagens_cards}
+                      source={{uri: item.imagem_produto}}>
+                      <TouchableOpacity
+                        style={{
+                          marginTop: 10,
+                          alignSelf: 'flex-end',
+                          marginRight: 12,
+                        }}
+                        onPress={() => deleteItemFavorito(item.id_produto)}>
+                        <Icon
+                          name="heart" color="red"
+                          type="font-awesome"
+                          size={25}
+                        />
+                      </TouchableOpacity>
+                    </Card.Image>
+                    <Card.Divider />
+                    <Card.Title numberOfLines={1} style={styles.titulo_cards}>
+                      {item.nome_produto}
+                    </Card.Title>
+                    <Card.Title style={styles.valor_cards}>
+                      R$ {item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
+                    </Card.Title>
+                  </Card>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
+  container_favorito:{
+  marginTop:25
+  },
   nomeLoader: {
     marginTop: 20,
     fontSize: 25,
@@ -98,24 +104,23 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
   },
+  
   card_style: {
     flex: 1,
     backgroundColor: '#D9D9D9',
     padding: 0,
-    width: '84%',
-    height: '78%',
+    width: 162,
+    height: 240,
     borderRadius: 5,
     borderWidth: 0,
-    elevation:10,
-    shadowColor:'#000306',
+    elevation: 10,
+    shadowColor: '#000306',
   },
   imagens_cards: {
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
-    width: 162,
-    height: 151.13,
-    
+    resizeMode:'contain'
   },
   titulo_cards: {
     fontSize: 18,
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
     color: '#181717',
     fontStyle: 'italic',
     fontWeight: 'normal',
-  }
+  },
 });
 
 export default Favorites;

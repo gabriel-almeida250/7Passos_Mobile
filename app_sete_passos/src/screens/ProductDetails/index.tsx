@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
 import AxiosInstance from '../../api/AxiosInstance';
 import { ProdutoType } from '../../models/ProdutoType';
 import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     marginLeft: -15,
-    width: 360,
+    width: Dimensions.get('screen').width,
     height: 380
   },
   containerImagem: {
