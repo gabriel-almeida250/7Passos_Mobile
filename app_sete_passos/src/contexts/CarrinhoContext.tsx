@@ -78,6 +78,12 @@ export const CarrinhoProvider= ({children}) => {
     )
   }
 
+  const removerTodosProdutos = () => {
+    realm_carrinho.write(() =>{
+      realm_carrinho.deleteAll();
+    })
+  }
+
   realm_carrinho.close
 
   return (
@@ -87,6 +93,7 @@ export const CarrinhoProvider= ({children}) => {
         contaQuantidadeProdutos,
         adicionarProduto,
         removerItemProduto,
+        removerTodosProdutos
       }}>
       {children}
     </CarrinhoContext.Provider>

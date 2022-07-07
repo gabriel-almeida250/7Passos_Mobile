@@ -9,35 +9,34 @@ import { ProdutoType } from '../models/ProdutoType';
 
 export default function BarraPesquisa(props) {
   const [pesquisa, setPesquisa] = useState('');
-  const [categoria, setCategoria] = useState<ProdutoType[]>([]);
+  const [produto, setProduto] = useState<ProdutoType[]>([]);
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
 
-  const selecionaPesquisa = (categoria: any) => {
-    pesquisar.Buscar(categoria);
+  const selecionaPesquisa = (produto: any) => {
+    pesquisar.Buscar(produto);
     props.navigation.navigate({
       name: 'ProductDetailsScreen',
       params: {
-        dadosDoProduto: categoria,
+        dadosDoProduto: produto,
       },
     });
     setPesquisa('');
   };
   useEffect(() => {
-    getDadosCategoria();
+    getDadosProduto();
   }, []);
 
-  const getDadosCategoria = async () => {
+  const getDadosProduto = async () => {
     AxiosInstance.get(`/produto/busca?keyword=${pesquisa}`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
       .then(result => {
-        // console.log('Dados das categorias:' + JSON.stringify(result.data));
-        setCategoria(result.data);
+        setProduto(result.data);
       })
       .catch(error => {
         console.log(
-          'Erro ao carregar a lista de categoria - ' + JSON.stringify(error),
+          'Erro ao carregar a lista de produtos - ' + JSON.stringify(error),
         );
       });
   };
@@ -64,7 +63,7 @@ export default function BarraPesquisa(props) {
         />
       </View>
       <ScrollView style={styles.resultadoContainer}>
-        {categoria
+        {produto
           .filter(val => {
             if (pesquisa.length <= 0) {
               return;
@@ -74,12 +73,12 @@ export default function BarraPesquisa(props) {
               return val;
             }
           })
-          .map((categoria, indice) => (
+          .map((produto, indice) => (
             <Text
               style={styles.pesquisaResultado}
-              onPress={e => selecionaPesquisa(categoria)}
+              onPress={e => selecionaPesquisa(produto)}
               key={indice}>
-              {categoria.nomeProduto}
+              {produto.nomeProduto}
             </Text>
           ))}
       </ScrollView>

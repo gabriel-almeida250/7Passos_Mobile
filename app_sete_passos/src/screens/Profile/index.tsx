@@ -3,12 +3,15 @@ import {Text, View, StyleSheet, Image, Dimensions} from 'react-native';
 import {Button} from 'react-native-elements';
 import Loader from '../../components/Loader';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
+import { CarrinhoContext } from '../../contexts/CarrinhoContext';
 
 const Profile = ({navigation}) => {
   const {usuario,setUsuario} = useContext(AutenticacaoContext);
   const [carregando, setCarregando] = useState(true);
+  const {removerTodosProdutos} = useContext(CarrinhoContext);
  
   const logout = () => {
+    removerTodosProdutos()
     setUsuario({});
     navigation.navigate("LoginScreen")
   }
