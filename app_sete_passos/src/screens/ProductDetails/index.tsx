@@ -13,9 +13,11 @@ const ProductDetails = ({ route, navigation }) => {
   const { adicionarProdutoFavoritos } = useContext(FavoritesContext);
   const [favorito, setFavorito ] = useState(false);
   const [carregando, setCarregando] = useState(true);
+  const {contaQuantidadeProdutos} = useContext(CarrinhoContext); 
 
 
   const handleAddProdutoCarrinho = () => {
+    contaQuantidadeProdutos();
     Alert.alert('Produto adicionado ao carrinho')
     adicionarProduto(
       dadosDoProduto.sku,
