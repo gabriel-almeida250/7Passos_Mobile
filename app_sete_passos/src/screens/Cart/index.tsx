@@ -1,35 +1,24 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import {  Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {   Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Icon, Text } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 import Loader from "../../components/Loader";
 import { CarrinhoContext } from "../../contexts/CarrinhoContext";
+import ListCarrinho from "../../components/ListCarrinho";
+
 
 const Cart = () => {
   const { listarProdutos, removerItemProduto } = useContext(CarrinhoContext);
   const [carrinho, setCarrinho] = useState();
-  const [quantidade, setQuantidade] = useState(1)
   const [carregando, setCarregando] = useState(true);
+  const [total, setTotal] = useState(0);
+  const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
   
-  const getDadosCarrinho = () => {
-    console.log("AQuiiiiiiiiiiiiiiiiiiiiiii ",carrinho);
-    
+  const getDadosCarrinho = () => { 
     setCarrinho(listarProdutos());
   }
-  
-  const deleteItem = (idProduto:number) => {
-    removerItemProduto(idProduto)
-  }
-  
-  function removeItem(idProduto:number){
-    setQuantidade(quantidade - 1)
-    
-    if(quantidade < 1 ){
-      deleteItem(idProduto)
-    }
-  }
-  
+
   setTimeout(() => {
     if (carrinho) {
       setCarregando(false);
@@ -49,9 +38,9 @@ const Cart = () => {
     </View>
    )}
     {!carregando && (
-      <FlatList 
+   <FlatList 
       data={carrinho}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item, index) => item.toString()}
       style={{backgroundColor:'#0D6EFD'}}
       ListHeaderComponent={
         <View>
@@ -59,41 +48,19 @@ const Cart = () => {
         </View>
       }
       renderItem={({item, index}) =>{
-        
-          return(
-              <View style={styles.container_flatlist}>
-                  <View >
-                  <Image source={{uri:item.imagem_produto}} style={{width: 113, height: 97, alignSelf:"flex-start", borderRadius: 10, resizeMode:'contain'}}/>
-                  </View>
-                  <View style={{flex: 1, alignSelf:"center"}}>
-                  <Text style={styles.text}>{item.nome_produto}</Text>
-                  <Text style={styles.text} numberOfLines={1}>{item.descricao_protudo}</Text>
-                  <Text style={styles.text}>{item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Text>
-                    <View style={{alignSelf: "center", flexDirection: "row", flex:1}}>
-                    <Button 
-                    style={{width: 33,height: 16}}
-                    onPress={() => removeItem(item.id_produto)}
-                    title={'-'}
-                    />
-                    <Text style={{marginRight: 10, marginLeft: 10}}>{quantidade}</Text>
-                        <Button 
-                        style={{width: 40,height: 16 }}
-                        onPress={() => setQuantidade(quantidade + 1)}
-                        title={'+'}
-                        />
-                    </View>
-                  </View>
-                  <TouchableOpacity 
-                  style={{alignSelf:"flex-end", bottom: 80, left:8}}
-                  onPress={() => deleteItem(item.id_produto)}>
-                      <Icon name="x" color='#0D6EFD' type="feather" size={25}/>
-                  </TouchableOpacity>
-              </View>
-          )
+        return(
+          <ListCarrinho item={item}/>
+        )
       }}
       ListFooterComponent={
         <View style={{marginLeft:20}}>
-          <Text style={{color:'white'}}>Total Compra: R${carrinho.preco_produto}</Text>
+                <Text style={{color:'white', marginLeft:10}}>Total Produto R$</Text>
+          <Text style={{color:'white', marginLeft:10, marginBottom: 10}}>Quantidade de Itens: {contaQuantidadeProdutos()}</Text>
+              <Button 
+              buttonStyle={{backgroundColor: '#D9D9D9'}}
+              titleStyle={{color: '#0D6EFD'}}
+              containerStyle={styles.btt_finalizar}
+              title="Finalizar Compra"/>
         </View>
       }
       />
@@ -126,6 +93,12 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor:'#0D6EFD'
+  },
+  btt_finalizar: {
+    marginBottom:20,
+    width: 250,
+    alignSelf: 'center',
+    
   }
 });
 
