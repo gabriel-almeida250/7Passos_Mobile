@@ -5,27 +5,30 @@ import {ScrollView} from 'react-native-gesture-handler';
 import AxiosInstance from '../api/AxiosInstance';
 import {AutenticacaoContext} from '../contexts/AutenticacaoContext';
 import {usePesquisar} from '../contexts/PesquisaContext';
-import {CategoriaType} from '../models/CategoriaType';
+import { ProdutoType } from '../models/ProdutoType';
 
 export default function BarraPesquisa(props) {
   const [pesquisa, setPesquisa] = useState('');
-  const [categoria, setCategoria] = useState<Categoriatype[]>([]);
+  const [categoria, setCategoria] = useState<ProdutoType[]>([]);
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
 
   const selecionaPesquisa = (categoria: any) => {
     pesquisar.Buscar(categoria);
-    props.navigation.navigate('ProductsCategoriesScreen');
-    setPesquisa("")
-    console.log('Categoria clicaca', pesquisar.pesquisa);
-
+    props.navigation.navigate({
+      name: 'ProductDetailsScreen',
+      params: {
+        dadosDoProduto: categoria,
+      },
+    });
+    setPesquisa('');
   };
   useEffect(() => {
     getDadosCategoria();
   }, []);
 
   const getDadosCategoria = async () => {
-    AxiosInstance.get(`/categoria`, {
+    AxiosInstance.get(`/produto/busca?keyword=${pesquisa}`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
       .then(result => {
@@ -40,7 +43,14 @@ export default function BarraPesquisa(props) {
   };
 
   return (
-    <View style={{flex: 1, paddingLeft: 15, marginTop: 20, paddingRight: 15, alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        paddingLeft: 15,
+        marginTop: 20,
+        paddingRight: 15,
+        alignItems: 'center',
+      }}>
       <View style={styles.containerPesquisa}>
         <Input
           placeholder="Pesquisar"
@@ -56,10 +66,10 @@ export default function BarraPesquisa(props) {
       <ScrollView style={styles.resultadoContainer}>
         {categoria
           .filter(val => {
-            if (pesquisa.length <= 1) {
+            if (pesquisa.length <= 0) {
               return;
             } else if (
-              val.nomeCategoria.toLowerCase().includes(pesquisa.toLowerCase())
+              val.nomeProduto.toLowerCase().includes(pesquisa.toLowerCase())
             ) {
               return val;
             }
@@ -69,7 +79,7 @@ export default function BarraPesquisa(props) {
               style={styles.pesquisaResultado}
               onPress={e => selecionaPesquisa(categoria)}
               key={indice}>
-              {categoria.nomeCategoria}
+              {categoria.nomeProduto}
             </Text>
           ))}
       </ScrollView>
@@ -79,29 +89,28 @@ export default function BarraPesquisa(props) {
 const styles = StyleSheet.create({
   containerPesquisa: {
     width: '100%',
-    maxWidth:346.5,
+    maxWidth: 346.5,
     backgroundColor: 'white',
     borderRadius: 10,
     height: 43,
     flex: 1,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   inputs: {
     color: 'black',
     borderBottomColor: 'white',
     padding: 5,
-    marginTop:30,
+    marginTop: 30,
     flex: 1,
-    
   },
   resultadoContainer: {
     width: '100%',
     marginTop: 5,
-    position:'absolute',
-    zIndex:1,
-    top:42,
+    position: 'absolute',
+    zIndex: 1,
+    top: 42,
     left: 15,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -109,14 +118,14 @@ const styles = StyleSheet.create({
   pesquisaResultado: {
     backgroundColor: 'white',
     padding: 10,
-    paddingLeft:15,
+    paddingLeft: 15,
     alignItems: 'stretch',
     justifyContent: 'center',
     borderBottomColor: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
     borderBottomWidth: 1,
     width: '100%',
     borderRadius: 10,
-    marginTop:2,
+    marginTop: 2,
   },
 });
