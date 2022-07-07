@@ -30,7 +30,7 @@ ProdutoSchemaFavorites.schema = {
   },
 };
 
-export let realm_carrinho = new Realm({schema: [ProdutoSchema, ProdutoSchemaFavorites], schemaVersion: 3});
+export let realm_carrinho = new Realm({schema: [ProdutoSchema, ProdutoSchemaFavorites], schemaVersion: 6});
 
 export const CarrinhoProvider= ({children}) => {
   const listarProdutos = () => {
