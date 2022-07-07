@@ -46,13 +46,13 @@ return(
           {carrinhoProduto.descricao_produto}
         </Text>
         <Text style={[styles.text, styles.precoDe]}>
-          R$ {(carrinhoProduto.preco_produto + carrinhoProduto.preco_produto  * 0.20)
+          De: R$ {(carrinhoProduto.preco_produto + carrinhoProduto.preco_produto  * 0.20)
             ?.toFixed(2)
             .replace('.', ',')
             .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
         </Text>
         <Text style={[styles.text, styles.precoPor]}>
-          R$ {carrinhoProduto.preco_produto
+          Por: R$ {carrinhoProduto.preco_produto
             ?.toFixed(2)
             .replace('.', ',')
             .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}

@@ -81,7 +81,7 @@ const Cart = ({navigation}) => {
               ListFooterComponent={
                 <View style={{marginLeft: 20}}>
                   <Text style={{color: 'white', marginLeft: 10}}>
-                    Total Produto R${' '}
+                    Total Produto R$
                     {total
                       .toFixed(2)
                       .replace('.', ',')
