@@ -48,7 +48,7 @@ return(
                 <View style={{flex: 1, alignSelf:"center"}}>
                 <Text style={styles.text}>{carrinhoProduto.nome_produto}</Text>
                 <Text style={styles.text} numberOfLines={1}>{carrinhoProduto.descricao_produto}</Text>
-                <Text style={styles.text}>{carrinhoProduto.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Text>
+                <Text style={styles.text}>R${carrinhoProduto.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Text>
                   <View style={{alignSelf: "center", flexDirection: "row", flex:1, marginTop:20}}>
                   <Button 
                   buttonStyle={{height: 16, width:30}}
