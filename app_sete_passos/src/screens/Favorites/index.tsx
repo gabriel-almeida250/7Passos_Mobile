@@ -1,23 +1,28 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
-import {Icon, Text} from 'react-native-elements';
-import {FlatList} from 'react-native-gesture-handler';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
+import { Icon, Text } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
-import {FavoritesContext} from '../../contexts/FavoritesContext';
-import {Card} from 'react-native-elements';
+import { FavoritesContext } from '../../contexts/FavoritesContext';
+import { Card } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
 
-const Favorites = ({navigation}) => {
-  const {listarProdutosFavoritos, removerItemProdutoFavoritos} =
+const Favorites = ({ navigation }) => {
+  const { listarProdutosFavoritos, removerItemProdutoFavoritos } =
     useContext(FavoritesContext);
   const [favorites, setFavorites] = useState();
   const [carregando, setCarregando] = useState(true);
+  const [vazio, setVazio] = useState(false);
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getDadosFavorites();
-  }, []);
+  }, []));
 
   const getDadosFavorites = () => {
     setFavorites(listarProdutosFavoritos());
+    if (listarProdutosFavoritos() == 0) {
+      setVazio(true)
+    }
   };
 
   const deleteItemFavorito = (idProduto: number) => {
@@ -41,50 +46,57 @@ const Favorites = ({navigation}) => {
       )}
       {!carregando && (
         <View style={styles.Container}>
-        <Text style={styles.tituloPagina}>Favorito(s)</Text>
-        <FlatList
-          data={favorites}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-          style={{backgroundColor:'#0D6EFD'}}
-          renderItem={({item, index}) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('ProductDetailsScreen');
-                }}>
-                <View style={styles.container_favorito}>
-                  <Card containerStyle={styles.card_style}>
-                    <Card.Image
-                      style={styles.imagens_cards}
-                      source={{uri: item.imagem_produto}}>
-                      <TouchableOpacity
-                        style={{
-                          marginTop: 10,
-                          alignSelf: 'flex-end',
-                          marginRight: 12,
-                        }}
-                        onPress={() => deleteItemFavorito(item.id_produto)}>
-                        <Icon
-                          name="heart" color="red"
-                          type="font-awesome"
-                          size={25}
-                        />
-                      </TouchableOpacity>
-                    </Card.Image>
-                    <Card.Divider />
-                    <Card.Title numberOfLines={1} style={styles.titulo_cards}>
-                      {item.nome_produto}
-                    </Card.Title>
-                    <Card.Title style={styles.valor_cards}>
-                      R$ {item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
-                    </Card.Title>
-                  </Card>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
+          <Text style={styles.tituloPagina}>Favorito(s)</Text>
+          {!vazio && (
+            <FlatList
+              data={favorites}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
+              style={{ backgroundColor: '#0D6EFD' }}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ProductDetailsScreen');
+                    }}>
+                    <View style={styles.container_favorito}>
+                      <Card containerStyle={styles.card_style}>
+                        <Card.Image
+                          style={styles.imagens_cards}
+                          source={{ uri: item.imagem_produto }}>
+                          <TouchableOpacity
+                            style={{
+                              marginTop: 10,
+                              alignSelf: 'flex-end',
+                              marginRight: 12,
+                            }}
+                            onPress={() => deleteItemFavorito(item.id_produto)}>
+                            <Icon
+                              name="heart" color="red"
+                              type="font-awesome"
+                              size={25}
+                            />
+                          </TouchableOpacity>
+                        </Card.Image>
+                        <Card.Divider />
+                        <Card.Title numberOfLines={1} style={styles.titulo_cards}>
+                          {item.nome_produto}
+                        </Card.Title>
+                        <Card.Title style={styles.valor_cards}>
+                          R$ {item.preco_produto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
+                        </Card.Title>
+                      </Card>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
+          {vazio && (
+            <View>
+              <Text style={styles.nada}>Favoritos vazio</Text>
+            </View>
+          )}
         </View>
       )}
     </>
@@ -92,19 +104,25 @@ const Favorites = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  Container:{
-    flex:1,
-    backgroundColor:'#0D6EFD',
+  Container: {
+    flex: 1,
+    backgroundColor: '#0D6EFD',
   },
-  tituloPagina:{
-    textAlign:'center',
-     color:'white',
-      marginTop: 20,
-       fontSize: 30,
-        marginBottom: 10
+  nada: {
+    fontSize: 30,
+    textAlign: 'center',
+    color: 'white',
+    marginTop: 180
   },
-  container_favorito:{
-  marginTop:25,
+  tituloPagina: {
+    textAlign: 'center',
+    color: 'white',
+    marginTop: 20,
+    fontSize: 30,
+    marginBottom: 10
+  },
+  container_favorito: {
+    marginTop: 25,
   },
   nomeLoader: {
     marginTop: 20,
@@ -117,8 +135,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
+    backgroundColor: '#0D6EFD'
   },
-  
+
   card_style: {
     flex: 1,
     backgroundColor: '#D9D9D9',
@@ -134,7 +153,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderWidth: 0,
-    resizeMode:'contain'
+    resizeMode: 'contain'
   },
   titulo_cards: {
     fontSize: 18,

@@ -40,7 +40,7 @@ export const FavoritesProvider= ({children}) => {
     console.log(JSON.stringify(realm_carrinho.objects('ProdutoFavoritos')));
   };
 
-  const removerItemProduto = (_id) => {
+  const removerItemProdutoFavoritos = (_id) => {
     realm_carrinho.write(() =>
     realm_carrinho.delete(
       realm_carrinho.objects('ProdutoFavoritos').filter(produto => produto.id_produto == _id),
@@ -54,7 +54,7 @@ export const FavoritesProvider= ({children}) => {
         listarProdutosFavoritos,
         contaQuantidadeProdutos,
         adicionarProdutoFavoritos,
-        removerItemProduto,
+        removerItemProdutoFavoritos,
       }}>
       {children}
     </FavoritesContext.Provider>
