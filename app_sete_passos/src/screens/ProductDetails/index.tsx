@@ -76,7 +76,7 @@ const ProductDetails = ({ route, navigation }) => {
       <View style={styles.containerProduto}>
         <Text style={styles.nome_produto}>{dadosDoProduto.nomeProduto}</Text>
         <Text style={styles.descricao_produto}>{dadosDoProduto.descricaoProduto}</Text>
-        <Text style={styles.preco_produto}>R${dadosDoProduto.precoProduto}</Text>
+        <Text style={styles.preco_produto}>R${dadosDoProduto.precoProduto},00</Text>
         <View style={styles.containerTamanho}>
           <TouchableOpacity
             style={styles.btt_tamanhos}>
