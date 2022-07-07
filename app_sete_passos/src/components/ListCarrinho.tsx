@@ -25,7 +25,7 @@ const ListCarrinho = (props: any) => {
     }
   }
 
-  return (
+return(
     <View style={styles.container_flatlist}>
       <View>
         <Image
