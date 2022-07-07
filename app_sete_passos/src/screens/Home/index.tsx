@@ -1,5 +1,12 @@
 import React, {useCallback, useContext} from 'react';
-import {StyleSheet, ScrollView, View, FlatList, RefreshControl, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import {Image, Text} from 'react-native-elements';
 import {useEffect, useState} from 'react';
 import AxiosInstance from '../../api/AxiosInstance';
@@ -9,8 +16,7 @@ import Loader from '../../components/Loader';
 import BarraPesquisa from '../../components/BarraPesquisa';
 import {ProdutoType} from '../../models/ProdutoType';
 import Carrousel from '../../components/Carrousel';
-import { useFocusEffect } from '@react-navigation/native';
-
+import {useFocusEffect} from '@react-navigation/native';
 
 const Home = ({navigation}) => {
   //console.log('Params:' + JSON.stringify(route));
@@ -20,10 +26,11 @@ const Home = ({navigation}) => {
   const [produtos, setProdutos] = useState<ProdutoType[]>([]);
   const [carregando, setCarregando] = useState(true);
 
-  useFocusEffect(useCallback(() => {
-    getProdutos();
-  } , []));
-
+  useFocusEffect(
+    useCallback(() => {
+      getProdutos();
+    }, []),
+  );
 
   const getProdutos = async () => {
     AxiosInstance.get(`/produto?pagina=3&qtdRegistros=4`, {
@@ -39,22 +46,23 @@ const Home = ({navigation}) => {
         );
       });
   };
-  
+
   function ListProduto({produto}) {
     return (
-      <TouchableOpacity onPress={() => {
-        navigation.navigate({
-          name: 'ProductDetailsScreen',
-          params: {
-            dadosDoProduto: produto,
-          },
-        });
-      }}>
-    <CardProduto dados={produto}/>
-    </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate({
+            name: 'ProductDetailsScreen',
+            params: {
+              dadosDoProduto: produto,
+            },
+          });
+        }}>
+        <CardProduto dados={produto} />
+      </TouchableOpacity>
     );
   }
-  
+
   setTimeout(() => {
     if (produtos) {
       setCarregando(false);
@@ -69,42 +77,43 @@ const Home = ({navigation}) => {
   ];
 
   return (
-    <ScrollView style={styles.container}>
-         {carregando && (
+    <ScrollView nestedScrollEnabled={true} style={styles.container}>
+      {carregando && (
         <View style={styles.containerLoader}>
           <Loader cor="white" />
           <Text style={styles.nomeLoader}>Carregando</Text>
         </View>
-      )}{!carregando && (
+      )}
+      {!carregando && (
         <View>
-       <View  style={styles.logoalinhar}>
-            <Image style={styles.logo}
+          <View style={styles.logoalinhar}>
+            <Image
+              style={styles.logo}
               source={{
                 uri: 'https://media.discordapp.net/attachments/972547744516415540/992889603579199549/Frame.png',
               }}
             />
           </View>
-      <BarraPesquisa navigation={navigation} />
-   
-      
-        <View>
-          <View style={styles.estilizandoCarro}>
-          <Carrousel imagens={imagens} />
-          </View>
-          <Text style={styles.titulo_secao}>{'Mais vendidos'}</Text>
+          <BarraPesquisa navigation={navigation} />
 
-          <View style={styles.estilizandoCard}>
-          <FlatList
-            data={produtos}
-            keyExtractor={(item, index) => String(item.idProduto)}
-            renderItem={({item}) => <ListProduto produto={item} />}
-            numColumns={2}
-            // onEndReached={getDadosCategoria}
-            // onEndReachedThreshold={0.1}
-            // ListFooterComponent={ <FooterList load={loading}/>}
-          />
+          <View>
+            <View style={styles.estilizandoCarro}>
+              <Carrousel imagens={imagens} />
+            </View>
+            <Text style={styles.titulo_secao}>{'Mais vendidos'}</Text>
+
+            <ScrollView horizontal={true}  contentContainerStyle={styles.estilizandoCard}>
+              <FlatList
+                data={produtos}
+                keyExtractor={(item, index) => String(item.idProduto)}
+                renderItem={({item}) => <ListProduto produto={item} />}
+                numColumns={2}
+                // onEndReached={getDadosCategoria}
+                // onEndReachedThreshold={0.1}
+                // ListFooterComponent={ <FooterList load={loading}/>}
+              />
+            </ScrollView>
           </View>
-        </View>
         </View>
       )}
     </ScrollView>
@@ -117,18 +126,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D6EFD',
     padding: 0,
   },
-  logoalinhar:{
-alignItems:'center'
+  logoalinhar: {
+    alignItems: 'center',
   },
-    estilizandoCarro:{
-      flex:1,
-      alignItems:'center',
-      flexDirection:'row',
-    },
-  logo:{
+  estilizandoCarro: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  logo: {
     height: 51,
     width: 153,
-    marginTop:15,
+    marginTop: 15,
     marginBottom: 15,
   },
   titulo_secao: {
@@ -143,9 +152,10 @@ alignItems:'center'
     color: 'white',
     textAlign: 'center',
   },
-  estilizandoCard:{
-    justifyContent:'center',
-    alignItems:'center'
+  estilizandoCard: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: "3.5%"
   },
   containerLoader: {
     position: 'relative',
