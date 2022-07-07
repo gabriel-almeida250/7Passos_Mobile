@@ -5,42 +5,51 @@ import {ScrollView} from 'react-native-gesture-handler';
 import AxiosInstance from '../api/AxiosInstance';
 import {AutenticacaoContext} from '../contexts/AutenticacaoContext';
 import {usePesquisar} from '../contexts/PesquisaContext';
-import {CategoriaType} from '../models/CategoriaType';
+import { ProdutoType } from '../models/ProdutoType';
 
 export default function BarraPesquisa(props) {
   const [pesquisa, setPesquisa] = useState('');
-  const [categoria, setCategoria] = useState<Categoriatype[]>([]);
+  const [produto, setProduto] = useState<ProdutoType[]>([]);
   const {usuario} = useContext(AutenticacaoContext);
   const pesquisar = usePesquisar();
 
-  const selecionaPesquisa = (categoria: any) => {
-    pesquisar.Buscar(categoria);
-    props.navigation.navigate('ProductsCategoriesScreen');
-    setPesquisa("")
-    console.log('Categoria clicaca', pesquisar.pesquisa);
-
+  const selecionaPesquisa = (produto: any) => {
+    pesquisar.Buscar(produto);
+    props.navigation.navigate({
+      name: 'ProductDetailsScreen',
+      params: {
+        dadosDoProduto: produto,
+      },
+    });
+    setPesquisa('');
   };
   useEffect(() => {
-    getDadosCategoria();
+    getDadosProduto();
   }, []);
 
-  const getDadosCategoria = async () => {
-    AxiosInstance.get(`/categoria`, {
+  const getDadosProduto = async () => {
+    AxiosInstance.get(`/produto/busca?keyword=${pesquisa}`, {
       headers: {Authorization: `Bearer ${usuario.token}`},
     })
       .then(result => {
-        // console.log('Dados das categorias:' + JSON.stringify(result.data));
-        setCategoria(result.data);
+        setProduto(result.data);
       })
       .catch(error => {
         console.log(
-          'Erro ao carregar a lista de categoria - ' + JSON.stringify(error),
+          'Erro ao carregar a lista de produtos - ' + JSON.stringify(error),
         );
       });
   };
 
   return (
-    <View style={{flex: 1, paddingLeft: 15, marginTop: 20, paddingRight: 15, alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        paddingLeft: 15,
+        marginTop: 20,
+        paddingRight: 15,
+        alignItems: 'center',
+      }}>
       <View style={styles.containerPesquisa}>
         <Input
           placeholder="Pesquisar"
@@ -54,22 +63,22 @@ export default function BarraPesquisa(props) {
         />
       </View>
       <ScrollView style={styles.resultadoContainer}>
-        {categoria
+        {produto
           .filter(val => {
-            if (pesquisa.length <= 1) {
+            if (pesquisa.length <= 0) {
               return;
             } else if (
-              val.nomeCategoria.toLowerCase().includes(pesquisa.toLowerCase())
+              val.nomeProduto.toLowerCase().includes(pesquisa.toLowerCase())
             ) {
               return val;
             }
           })
-          .map((categoria, indice) => (
+          .map((produto, indice) => (
             <Text
               style={styles.pesquisaResultado}
-              onPress={e => selecionaPesquisa(categoria)}
+              onPress={e => selecionaPesquisa(produto)}
               key={indice}>
-              {categoria.nomeCategoria}
+              {produto.nomeProduto}
             </Text>
           ))}
       </ScrollView>
@@ -79,29 +88,28 @@ export default function BarraPesquisa(props) {
 const styles = StyleSheet.create({
   containerPesquisa: {
     width: '100%',
-    maxWidth:346.5,
+    maxWidth: 346.5,
     backgroundColor: 'white',
     borderRadius: 10,
     height: 43,
     flex: 1,
-    alignItems:'center',
-    justifyContent:'center',
-    marginBottom:20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   inputs: {
     color: 'black',
     borderBottomColor: 'white',
     padding: 5,
-    marginTop:30,
+    marginTop: 30,
     flex: 1,
-    
   },
   resultadoContainer: {
     width: '100%',
     marginTop: 5,
-    position:'absolute',
-    zIndex:1,
-    top:42,
+    position: 'absolute',
+    zIndex: 1,
+    top: 42,
     left: 15,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -109,14 +117,14 @@ const styles = StyleSheet.create({
   pesquisaResultado: {
     backgroundColor: 'white',
     padding: 10,
-    paddingLeft:15,
+    paddingLeft: 15,
     alignItems: 'stretch',
     justifyContent: 'center',
     borderBottomColor: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
     borderBottomWidth: 1,
     width: '100%',
     borderRadius: 10,
-    marginTop:2,
+    marginTop: 2,
   },
 });

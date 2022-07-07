@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
-import { Icon, Text } from 'react-native-elements';
+import { StyleSheet, TouchableOpacity, View, Image, Alert, RefreshControl } from 'react-native';
+import { Button, Icon, Text } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
 import { FavoritesContext } from '../../contexts/FavoritesContext';
@@ -48,19 +48,23 @@ const Favorites = ({ navigation }) => {
       )}
       {!carregando && (
         <View style={styles.Container}>
-          <Text style={styles.tituloPagina}>Favorito(s)</Text>
+          <Text style={styles.tituloPagina}>Favoritos</Text>
           {!vazio && (
             <FlatList
               data={favorites}
               keyExtractor={(item, index) => index.toString()}
+              refreshControl={
+                <RefreshControl
+                  refreshing={carregando}
+                  onRefresh={getDadosFavorites}
+                  colors={['#0D6EFD']}
+
+                />
+              }
               numColumns={2}
               style={{ backgroundColor: '#0D6EFD' }}
               renderItem={({ item, index }) => {
                 return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ProductDetailsScreen');
-                    }}>
                     <View style={styles.container_favorito}>
                       <Card containerStyle={styles.card_style}>
                         <Card.Image
@@ -89,14 +93,19 @@ const Favorites = ({ navigation }) => {
                         </Card.Title>
                       </Card>
                     </View>
-                  </TouchableOpacity>
                 );
               }}
             />
           )}
           {vazio && (
             <View>
-              <Text style={styles.nada}>Favoritos vazio</Text>
+              <Text style={styles.nada}>{'OPS... Nenhum produto encontrado :('}</Text>
+              <Button
+                title='Voltar para Home'
+                onPress={() => navigation.navigate('HomeTabScreen')}
+                titleStyle={styles.titulobotao}
+                buttonStyle={styles.botaostyle}>
+              </Button>
             </View>
           )}
         </View>
@@ -114,7 +123,22 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     color: 'white',
-    marginTop: 180
+    marginTop: 180,
+    width: 320,
+    alignSelf: 'center'
+  },
+  botaostyle: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    width: 210,
+    alignSelf: 'center',
+    marginTop: 85,
+
+  },
+  titulobotao: {
+    color: '#0D6EFD',
+    margin: 5,
+    fontSize: 20,
   },
   tituloPagina: {
     textAlign: 'center',

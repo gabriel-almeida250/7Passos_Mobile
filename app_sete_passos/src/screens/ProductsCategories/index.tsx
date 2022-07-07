@@ -19,7 +19,7 @@ import {usePesquisar} from '../../contexts/PesquisaContext';
 import {ProdutoType} from '../../models/ProdutoType';
 
 const ProductsCategories = ({navigation}) => {
-  const perPage = 4;
+  const perPage = 6;
   const [produto, setProduto] = useState<ProdutoType[]>([]);
   const [loading, setLoading] = useState(false);
   const [semProduto, setSemProduto] = useState(false);
@@ -74,7 +74,7 @@ const ProductsCategories = ({navigation}) => {
     if (produto) {
       setCarregando(false);
     }
-  }, 2000);
+  }, 5000);
 
   useEffect(() => {
     if (terminouDeCarregar == false) {
