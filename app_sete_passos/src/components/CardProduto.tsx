@@ -16,7 +16,8 @@ const CardProduto = (props: any) => {
           />
           <Card.Divider />
           <Card.Title numberOfLines={1} style={styles.titulo_cards}>{dadosDoProduto.nomeProduto}</Card.Title>
-          <Card.Title style={styles.valor_cards}>R$ {dadosDoProduto.precoProduto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
+          <Card.Title style={[styles.valor_cards, styles.precoDe]}>De: R$ {(dadosDoProduto.precoProduto + dadosDoProduto.precoProduto  * 0.20)?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
+          <Card.Title style={styles.valor_cards}>Por: R$ {dadosDoProduto.precoProduto?.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')}</Card.Title>
 
         </Card>
       </View>
@@ -41,6 +42,12 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     resizeMode:'contain'
   },
+    precoDe:{
+    fontSize: 14,
+    translateY:-5,
+    marginLeft: -15,
+    textDecorationLine:'line-through'
+  },
   titulo_cards: {
     fontSize: 18,
     color: '#0a0a0a',
@@ -50,6 +57,7 @@ const styles = StyleSheet.create({
   valor_cards: {
     marginBottom: 20,
     fontSize: 16,
+    translateY:-30,
     textAlign: 'center',
     color: '#181717',
     fontStyle: 'italic',
