@@ -22,6 +22,8 @@ const Favorites = ({ navigation }) => {
     setFavorites(listarProdutosFavoritos());
     if (listarProdutosFavoritos() == 0) {
       setVazio(true)
+    } else {
+      setVazio(false)
     }
   };
 
