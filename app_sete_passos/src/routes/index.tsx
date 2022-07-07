@@ -117,8 +117,8 @@ const Routes = () => {
         />
         <StackNavigation.Screen
           name="Favorites"
-          component={Favorites}
-          options={{headerShown: true}}
+          component={BottomTabNavigator}
+          options={{headerShown: false}}
         />
         <StackNavigation.Screen
           name="ProfileScreen"
