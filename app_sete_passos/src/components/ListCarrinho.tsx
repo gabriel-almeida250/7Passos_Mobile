@@ -36,10 +36,6 @@ const ListCarrinho = (props:any) => {
     }
 }, 2000);
 
-useFocusEffect(useCallback(() => {
-  getDadosCarrinho();
-} , []));
-  
 return(
     <View style={styles.container_flatlist}>
                 <View >
