@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import {  Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Icon, Text } from "react-native-elements";
-import { useFocusEffect } from "@react-navigation/native";
 import { CarrinhoContext } from "../contexts/CarrinhoContext";
 
 const ListCarrinho = (props:any) => {
@@ -12,12 +11,7 @@ const ListCarrinho = (props:any) => {
     const [quantidade, setQuantidade] = useState(1)
     const [carregando, setCarregando] = useState(true);
     const [total, setTotal] = useState(0);
-
-
-    const getDadosCarrinho = () => {      
-      setCarrinho(listarProdutos());
-    }
-    
+  
     const deleteItem = (idProduto:number) => {
       removerItemProduto(idProduto)
     }
@@ -30,16 +24,6 @@ const ListCarrinho = (props:any) => {
       }
     }
     
-    setTimeout(() => {
-      if (carrinho) {
-        setCarregando(false);
-    }
-}, 2000);
-
-useFocusEffect(useCallback(() => {
-  getDadosCarrinho();
-} , []));
-  
 return(
     <View style={styles.container_flatlist}>
                 <View >
