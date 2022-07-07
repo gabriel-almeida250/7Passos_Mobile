@@ -1,76 +1,71 @@
-import React, { useContext, useEffect, useState } from "react";
-import {  Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useContext, useEffect, useState, useCallback } from "react";
+import {   Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button, Icon, Text } from "react-native-elements";
+import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
+import Loader from "../../components/Loader";
 import { CarrinhoContext } from "../../contexts/CarrinhoContext";
+import ListCarrinho from "../../components/ListCarrinho";
+
 
 const Cart = () => {
   const { listarProdutos, removerItemProduto } = useContext(CarrinhoContext);
   const [carrinho, setCarrinho] = useState();
+  const [carregando, setCarregando] = useState(true);
+  const [total, setTotal] = useState(0);
+  const {contaQuantidadeProdutos} = useContext(CarrinhoContext);
   
-  const [quantidade, setQuantidade] = useState(1)
-  
-  useEffect(() => {
-      getDadosCarrinho();
-    }, []);
-    
-  const getDadosCarrinho = () => {
-    console.log("AQuiiiiiiiiiiiiiiiiiiiiiii ",carrinho);
-
-      setCarrinho(listarProdutos());
+  const getDadosCarrinho = () => { 
+    setCarrinho(listarProdutos());
   }
 
-  const deleteItem = (idProduto:number) => {
-      removerItemProduto(idProduto)
-  }
-
-  function removeItem(idProduto:number){
-    setQuantidade(quantidade - 1)
-
-    if(quantidade < 1 ){
-        deleteItem(idProduto)
+  setTimeout(() => {
+    if (carrinho) {
+      setCarregando(false);
     }
-}
+  }, 2000);
+  
+  useFocusEffect(useCallback(() => {
+    getDadosCarrinho();
+  } , []));
 
   return(
-      <FlatList 
+    <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+    {!carregando && (
+   <FlatList 
       data={carrinho}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item, index) => item.toString()}
       style={{backgroundColor:'#0D6EFD'}}
+      ListHeaderComponent={
+        <View>
+      <Text style={{textAlign:'center', color:'white', marginTop: 20, fontSize: 30, marginBottom: 10}}>Meu Carrinho</Text>
+        </View>
+      }
       renderItem={({item, index}) =>{
-          return(
-              
-              <View style={styles.container_flatlist}>
-                  <View >
-                  <Image source={{uri:item.imagem_produto}} style={{width: 113, height: 97, alignSelf:"flex-start", borderRadius: 10}}/>
-                  </View>
-                  <View style={{flex: 1, alignSelf:"center"}}>
-                  <Text style={styles.text}>{item.nome_produto}</Text>
-                  <Text style={styles.text}>{item.descricao_protudo}</Text>
-                  <Text style={styles.text}>{item.preco_produto}</Text>
-                    <View style={{alignSelf: "center", flexDirection: "row", flex:1}}>
-                    <Button 
-                    style={{width: 33,height: 16}}
-                    onPress={() => removeItem(item.id_produto)}
-                    title={'-'}
-                    />
-                    <Text style={{marginRight: 10, marginLeft: 10}}>{quantidade}</Text>
-                        <Button 
-                        style={{width: 40,height: 16 }}
-                        onPress={() => setQuantidade(quantidade + 1)}
-                        title={'+'}
-                        />
-                    </View>
-                  </View>
-                  <TouchableOpacity 
-                  style={{alignSelf:"flex-end", bottom: 80, left:8}}
-                  onPress={() => deleteItem(item.id_produto)}>
-                      <Icon name="x" color='#0D6EFD' type="feather" size={25}/>
-                  </TouchableOpacity>
-              </View>
-          )
+        return(
+          <ListCarrinho item={item}/>
+        )
       }}
+      ListFooterComponent={
+        <View style={{marginLeft:20}}>
+                <Text style={{color:'white', marginLeft:10}}>Total Produto R$</Text>
+          <Text style={{color:'white', marginLeft:10, marginBottom: 10}}>Quantidade de Itens: {contaQuantidadeProdutos()}</Text>
+              <Button 
+              buttonStyle={{backgroundColor: '#D9D9D9'}}
+              titleStyle={{color: '#0D6EFD'}}
+              containerStyle={styles.btt_finalizar}
+              title="Finalizar Compra"/>
+        </View>
+      }
       />
+      )}
+      </>
   )
 }
 
@@ -85,6 +80,25 @@ const styles = StyleSheet.create({
   text:{
     textAlign: "center",
     color: '#0D6EFD'
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
+  },
+  btt_finalizar: {
+    marginBottom:20,
+    width: 250,
+    alignSelf: 'center',
+    
   }
 });
 

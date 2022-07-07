@@ -1,10 +1,10 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useState} from "react";
 import { UsuarioType } from "../models/UsuarioType";
 import { LoginService } from "../services/LoginService";
+import { RecoveryPasswordService } from "../services/RecoveryPasswordService";
 import { RegisterService } from "../services/RegisterService";
 
 export const AutenticacaoContext = createContext({});
-
 
 export const AutenticacaoProvider = ({children}) => {
     
@@ -28,17 +28,35 @@ export const AutenticacaoProvider = ({children}) => {
     };
 
     const register = async (nome:string, email:string, senha:string, file:string) => {
-        const respostaServicRegister= await RegisterService (nome,email, senha,file)
-        if (!respostaServicRegister) {
+        const respostaServiceRegister= await RegisterService (nome,email, senha,file)
+        if (!respostaServiceRegister) {
             return false;
         } else {
             setUsuario({
-                id: respostaServicRegister?.id,
-                name: respostaServicRegister?.nome,
-                email: respostaServicRegister?.email,
-                token: respostaServicRegister?.token,
-                fotoPerfil:respostaServicRegister?.fotoPerfil,
+                id: respostaServiceRegister?.id,
+                name: respostaServiceRegister?.name,
+                email: respostaServiceRegister?.email,
+                token: respostaServiceRegister?.token,
+                fotoPerfil:respostaServiceRegister?.foto_perfil,
             });
+            return true;
+        }
+    };
+
+    const trocarSenha = async (email:string,senha:string) =>{   
+
+        console.log("senha", senha)
+        const respostaServiceRegistery= await RecoveryPasswordService(email,senha)
+        if (!respostaServiceRegistery) {
+            return false;
+        } else {
+            // setUsuario({
+            //     id: usuario!.id,
+            //     name: usuario!.name,
+            //     email: usuario!.email,
+            //     token: respostaServiceRegistery?.token,
+            //     fotoPerfil:respostaServiceRegistery?.foto_perfil,
+            // });
             return true;
         }
     };
@@ -47,6 +65,7 @@ export const AutenticacaoProvider = ({children}) => {
             login,
             register,
             setUsuario,
+            trocarSenha,
             usuario,
         }}>
             {children}

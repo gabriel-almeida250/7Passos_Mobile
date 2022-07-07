@@ -1,18 +1,35 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Text, View, StyleSheet, Image, Dimensions} from 'react-native';
 import {Button} from 'react-native-elements';
+import Loader from '../../components/Loader';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 
 const Profile = ({navigation}) => {
   const {usuario,setUsuario} = useContext(AutenticacaoContext);
+  const [carregando, setCarregando] = useState(true);
  
   const logout = () => {
     setUsuario({});
     navigation.navigate("LoginScreen")
   }
 
+  setTimeout(() => {
+    if (usuario) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return (
     <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+
+{!carregando && (
+
       <View style={styles.container}>
         <View style={styles.topo} />
         <Image style={styles.foto} source={{uri: usuario.fotoPerfil}} />
@@ -22,12 +39,16 @@ const Profile = ({navigation}) => {
           <Button
             buttonStyle={styles.botao}
             titleStyle={styles.tituloBotao}
-            title="Editar Senha"
-            onPress={()=> navigation.navigate("PasswordRecoveryScreen")}
+            title="Trocar Senha"
+            onPress={()=> navigation.navigate({
+              name:"ChangePasswordScreen",
+              params: { dadosDoUsuario: usuario,
+            }})}
           />
           <Text onPress={()=> logout()} style={styles.btnSair}>Sair</Text>
         </View>
       </View>
+        )}
     </>
   );
 };
@@ -37,6 +58,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
   },
   topo: {
     backgroundColor: '#1c78ff',

@@ -1,34 +1,30 @@
 import React, {useState, useContext} from 'react';
-import {View, StyleSheet, Alert, Keyboard, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Keyboard,
+  Image,
+} from 'react-native';
 import {Text, Input, Icon, Button} from 'react-native-elements';
 import {AutenticacaoContext} from '../../contexts/AutenticacaoContext';
 import Loader from '../../components/Loader';
 
-const PasswordRecovery = ({navigation}) => {
+const ChangePassword = ({navigation}) => {
   const [carregando, setCarregando] = useState(false);
   const {usuario, trocarSenha} = useContext(AutenticacaoContext);
 
-  const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
 
-  const [erroEmail, setErroEmail] = useState('');
   const [erroSenha, setErroSenha] = useState('');
   const [erroConfirmaSenha, setErroConfirmaSenha] = useState('');
-  const regexEmail =
-    /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$/;
 
   const validarFormulario = () => {
     let error = false;
-    setErroEmail('');
     setErroSenha('');
     setErroConfirmaSenha('');
-
-    if (email == '') {
-      setErroEmail('Este campo é obrigatório.');
-      error = true;
-      setCarregando(false);
-    }
 
     if (senha == '') {
       setErroSenha('Este campo é obrigatório.');
@@ -47,16 +43,11 @@ const PasswordRecovery = ({navigation}) => {
       error = true;
       setCarregando(false);
     }
-
-    if (!regexEmail.test(String(email).toLowerCase())) {
-      setErroEmail('Preencha o email corretamente.');
-      error = true;
-      setCarregando(false);
-    }
     return !error;
   };
 
-  const recuperarSenha = async (email:string,senhaUsuario: string) => {
+  const atualizarSenha = async (senhaUsuario: string) => {
+    const email = usuario.email;
     setCarregando(true);
     Keyboard.dismiss();
 
@@ -64,13 +55,13 @@ const PasswordRecovery = ({navigation}) => {
       const respostaRegister = await trocarSenha(email, senhaUsuario);
       if (!respostaRegister) {
         setCarregando(false);
-        Alert.alert('Não foi possivel recuperar a sua senha.', '', [
+        Alert.alert('Não foi possivel atualizar a sua senha.', '', [
           {text: 'Ok'},
         ]);
       } else {
-        Alert.alert('Senha recuperada com sucesso!', '', [
-          {text: 'Ok'},
-        ]);
+        Alert.alert('Senha alterada com sucesso.', '', [
+            {text: 'Ok'},
+          ]);
         setCarregando(false);
         navigation.goBack();
       }
@@ -88,18 +79,14 @@ const PasswordRecovery = ({navigation}) => {
         />
       </View>
 
-      <View style={styles.containerPesquisa}>
-        <Input
-          inputContainerStyle={styles.inputs}
+      {/* <View style={styles.containerPesquisa}>
+        <Input inputContainerStyle={styles.inputs}
           placeholder="E-mail"
-          errorMessage={erroEmail}
-          onChangeText={valor => {
-            setEmail(valor);
-            setErroEmail('');
-          }}
-          leftIcon={<Icon name="mail" color="grey" type="ionocons" size={26} />}
+          leftIcon={
+            <Icon name="mail" color="grey" type="ionocons" size={26} />
+          }
         />
-      </View>
+      </View> */}
 
       <View style={styles.containerPesquisa}>
         <Input
@@ -141,7 +128,7 @@ const PasswordRecovery = ({navigation}) => {
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
-          onPress={() => recuperarSenha(email,senha)}
+          onPress={() => atualizarSenha(senha, confirmaSenha)}
         />
 
         {carregando && (
@@ -222,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PasswordRecovery;
+export default ChangePassword;

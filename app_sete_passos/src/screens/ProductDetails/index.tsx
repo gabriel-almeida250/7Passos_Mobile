@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Image } from 'react-native';
-import AxiosInstance from '../../api/AxiosInstance';
-import { ProdutoType } from '../../models/ProdutoType';
-import { AutenticacaoContext } from '../../contexts/AutenticacaoContext';
-import CardProduto from '../../components/CardProduto';
+import { Text, TouchableOpacity, View, StyleSheet, Image, Dimensions, Alert } from 'react-native';
 import { CarrinhoContext } from '../../contexts/CarrinhoContext';
-import { Icon, Input } from 'react-native-elements';
+import { Icon} from 'react-native-elements';
 import { FavoritesContext } from '../../contexts/FavoritesContext';
+import Loader from '../../components/Loader';
 
 const ProductDetails = ({ route, navigation }) => {
   const { dadosDoProduto } = route.params;
@@ -15,8 +12,13 @@ const ProductDetails = ({ route, navigation }) => {
   const { adicionarProduto } = useContext(CarrinhoContext);
   const { adicionarProdutoFavoritos } = useContext(FavoritesContext);
   const [favorito, setFavorito ] = useState(false);
+  const [carregando, setCarregando] = useState(true);
+  const {contaQuantidadeProdutos} = useContext(CarrinhoContext); 
 
-  const handleAddProduto = () => {
+
+  const handleAddProdutoCarrinho = () => {
+    contaQuantidadeProdutos();
+    Alert.alert('Produto adicionado ao carrinho')
     adicionarProduto(
       dadosDoProduto.sku,
       dadosDoProduto.nomeProduto,
@@ -25,7 +27,8 @@ const ProductDetails = ({ route, navigation }) => {
       dadosDoProduto.imagemProduto,
     );
   };
-  const handleAddProduto2 = () => {
+  
+  const handleAddProdutoFavoritos = () => {
     adicionarProdutoFavoritos(
       dadosDoProduto.sku,
       dadosDoProduto.nomeProduto,
@@ -37,12 +40,28 @@ const ProductDetails = ({ route, navigation }) => {
     console.log("Entrou favorito" + dadosDoProduto);
 
   };
+
+  setTimeout(() => {
+    if (dadosDoProduto) {
+      setCarregando(false);
+    }
+  }, 2000);
+
   return (
+    <>
+    {carregando && (
+      <View style={styles.containerLoader}>
+      <Loader cor="white" />
+      <Text style={styles.nomeLoader}>Carregando</Text>
+    </View>
+   )}
+   {!carregando && (
+
     <View style={styles.containerPai}>
       <View style={styles.container}>
       <TouchableOpacity
           style={styles.btt_favoritar}
-          onPress={() => handleAddProduto2()}>
+          onPress={() => handleAddProdutoFavoritos()}>
           {favorito &&
             <Icon name="heart" color="red" type="font-awesome" size={25} />}
           {!favorito &&
@@ -85,23 +104,17 @@ const ProductDetails = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <FlatList
-          data={produto}
-          keyExtractor={(item, index) => String(item.idProduto)}
-          renderItem={({ item }) => <ListProduto produto={item} />}
-          horizontal={true}
-        //onEndReached={getDadosProduto}
-        //onEndReachedThreshold={0.1}
-        //ListFooterComponent={ <FooterList load={loading}/>}
-        /> */}
+
       <View style={styles.container_comprar}>
         <TouchableOpacity
-          onPress={() => handleAddProduto()}
+          onPress={() => handleAddProdutoCarrinho()}
           style={styles.btt_comprar}>
           <Text style={styles.txt_btt_comprar}>Comprar</Text>
         </TouchableOpacity>
       </View>
     </View>
+        )}
+        </>
   )
 }
 
@@ -114,13 +127,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex'
   },
+  nomeLoader: {
+    marginTop: 20,
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center',
+  },
+  containerLoader: {
+    position: 'relative',
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor:'#0D6EFD'
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     marginLeft: -15,
-    width: 360,
+    width: Dimensions.get('screen').width,
     height: 380
   },
   containerImagem: {

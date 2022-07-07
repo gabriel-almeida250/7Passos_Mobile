@@ -14,17 +14,33 @@ ProdutoSchema.schema = {
     preco_produto: 'double',
     imagem_produto: 'string',
   },
+
 };
 
-let realm_carrinho = new Realm({schema: [ProdutoSchema], schemaVersion: 1});
+class ProdutoSchemaFavorites extends Realm.Object {}
+ProdutoSchemaFavorites.schema = {
+  name: 'ProdutoFavoritos',
+  properties: {
+    id_produto: {type: 'int', default: 0},
+    sku: 'string',
+    nome_produto: 'string',
+    descricao_produto: 'string',
+    preco_produto: 'double',
+    imagem_produto: 'string',
+  },
+};
+
+export let realm_carrinho = new Realm({schema: [ProdutoSchema, ProdutoSchemaFavorites], schemaVersion: 7});
 
 export const CarrinhoProvider= ({children}) => {
   const listarProdutos = () => {
     return realm_carrinho.objects('Produto');
   };
+
   const contaQuantidadeProdutos = () => {
     return realm_carrinho.objects('Produto').length;
   };
+  
   const adicionarProduto = (
     _sku: string,
     _nome: string,
@@ -61,6 +77,8 @@ export const CarrinhoProvider= ({children}) => {
       ),
     )
   }
+
+  realm_carrinho.close
 
   return (
     <CarrinhoContext.Provider

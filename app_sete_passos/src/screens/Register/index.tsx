@@ -37,26 +37,31 @@ const Register = ({navigation}) => {
     if (nome == '') {
       setErroNome('O campo nome é obrigatório.');
       error = true;
+      setCarregando(false);
     }
 
     if (email == '') {
       setErroEmail('O campo email é obrigatório.');
       error = true;
+      setCarregando(false);
     }
 
     if (senha == '') {
       setErroSenha('O campo senha é obrigatório.');
       error = true;
+      setCarregando(false);
     }
 
     if (foto == '') {
       setErroFoto('O campo foto é obrigatório.');
       error = true;
+      setCarregando(false);
     }
 
     if (!regexEmail.test(String(email).toLowerCase())) {
       setErroEmail('Preencha o email corretamente.');
       error = true;
+      setCarregando(false);
     }
     return !error;
   };
@@ -75,7 +80,7 @@ const Register = ({navigation}) => {
         ]);
       } else {
         setCarregando(false);
-        navigation.navigate('HomeScreen');
+        navigation.navigate('LoginScreen');
       }
     }
   };
@@ -155,7 +160,7 @@ const Register = ({navigation}) => {
           titleStyle={styles.titulobotao}
           buttonStyle={styles.botaostyle}
           disabled={carregando}
-          onPress={() => cadastrarUsuario()}
+          onPress={() => cadastrarUsuario(nome,email,senha,foto)}
         />
 
         {carregando && (
@@ -170,6 +175,7 @@ const Register = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     backgroundColor: '#0D6EFD',
     padding: 16,
     alignItems: 'stretch',
