@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Image, Alert, RefreshControl } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import Loader from '../../components/Loader';
@@ -53,6 +53,14 @@ const Favorites = ({ navigation }) => {
             <FlatList
               data={favorites}
               keyExtractor={(item, index) => index.toString()}
+              refreshControl={
+                <RefreshControl
+                  refreshing={carregando}
+                  onRefresh={getDadosFavorites}
+                  colors={['#0D6EFD']}
+  
+                />
+              }
               numColumns={2}
               style={{ backgroundColor: '#0D6EFD' }}
               renderItem={({ item, index }) => {
